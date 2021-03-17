@@ -5,6 +5,7 @@ import Player from '../types/Player';
 import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
+import { Socket } from 'socket.io';
 
 const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
@@ -94,27 +95,6 @@ export default class CoveyTownController {
   }
 
   /**
-   * Destroys all data related to a player in this town.
-   *
-   * @param session PlayerSession to destroy
-   */
-  destroySession(session: PlayerSession): void {
-    this._players = this._players.filter((p) => p.id !== session.player.id);
-    this._sessions = this._sessions.filter((s) => s.sessionToken !== session.sessionToken);
-    this._listeners.forEach((listener) => listener.onPlayerDisconnected(session.player));
-  }
-
-  /**
-   * Updates the location of a player within the town
-   * @param player Player to update location for
-   * @param location New location for this player
-   */
-  updatePlayerLocation(player: Player, location: UserLocation): void {
-    player.updateLocation(location);
-    this._listeners.forEach((listener) => listener.onPlayerMoved(player));
-  }
-
-  /**
    * Subscribe to events from this town. Callers should make sure to
    * unsubscribe when they no longer want those events by calling removeTownListener
    *
@@ -135,16 +115,80 @@ export default class CoveyTownController {
   }
 
   /**
-   * Fetch a player's session based on the provided session token. Returns undefined if the
-   * session token is not valid.
-   *
-   * @param token
+   * Notify all listeners that the town is destroyed.
    */
-  getSessionByToken(token: string): PlayerSession | undefined {
-    return this._sessions.find((p) => p.sessionToken === token);
-  }
-
   disconnectAllPlayers(): void {
     this._listeners.forEach((listener) => listener.onTownDestroyed());
   }
+
+  /**
+   * Configures the socket to emit and react to events.
+   * @param sessionToken The session token of the player connected via the socket
+   * @param socket The player's socket to configure
+   */
+  connect(sessionToken: string, socket: Socket) {
+    const session = this._sessions.find((p) => p.sessionToken === sessionToken);
+    if (!session) {
+      // No valid session exists for this token, hence this client's connection should be terminated
+      socket.disconnect(true);
+    } else {
+      // Create an adapter that will translate events from the CoveyTownController into
+      // events that the socket protocol knows about
+      const listener = townSocketAdapter(socket);
+      this.addTownListener(listener);
+  
+      socket.on('disconnect', () => {
+        this.onDisconnect(listener, session);
+      });
+      socket.on('playerMovement', (movementData: UserLocation) => {
+        this.onPlayerMovement(session.player, movementData);
+      });
+    }
+  }
+
+  /**
+   * Updates the location of a player within the town
+   * @param player Player to update location for
+   * @param location New location for this player
+   */
+  private onPlayerMovement(player: Player, location: UserLocation): void {
+    player.updateLocation(location);
+    this._listeners.forEach((listener) => listener.onPlayerMoved(player));
+  }
+
+  /**
+   * Disconnect the player from the town
+   * @param listener The listener associated with the player to disconnect
+   * @param session The session associated with the player to disconnect
+   */
+  private onDisconnect(listener: CoveyTownListener, session: PlayerSession) {
+    this.removeTownListener(listener);
+    this._players = this._players.filter((p) => p.id !== session.player.id);
+    this._sessions = this._sessions.filter((s) => s.sessionToken !== session.sessionToken);
+    this._listeners.forEach((listener) => listener.onPlayerDisconnected(session.player));
+  }
+}
+
+/**
+ * An adapter between CoveyTownController's event interface (CoveyTownListener)
+ * and the low-level network communication protocol
+ *
+ * @param socket the Socket object that we will use to communicate with the player
+ */
+ function townSocketAdapter(socket: Socket): CoveyTownListener {
+  return {
+    onPlayerMoved(movedPlayer: Player) {
+      socket.emit('playerMoved', movedPlayer);
+    },
+    onPlayerDisconnected(removedPlayer: Player) {
+      socket.emit('playerDisconnect', removedPlayer);
+    },
+    onPlayerJoined(newPlayer: Player) {
+      socket.emit('newPlayer', newPlayer);
+    },
+    onTownDestroyed() {
+      socket.emit('townClosing');
+      socket.disconnect(true);
+    },
+  };
 }

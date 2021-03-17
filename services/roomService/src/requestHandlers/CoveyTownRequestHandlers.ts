@@ -1,10 +1,8 @@
 import assert from 'assert';
 import { Socket } from 'socket.io';
 import Player from '../types/Player';
-import { CoveyTownList, UserLocation } from '../CoveyTypes';
-import CoveyTownListener from '../types/CoveyTownListener';
+import { CoveyTownList } from '../CoveyTypes';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
-import CoveyTownController from '../lib/CoveyTownController';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware

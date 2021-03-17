@@ -1,4 +1,4 @@
-import Player from "./Player";
+import Player from './Player';
 
 export interface JoinTownResponse {
   coveyUserID: string,
@@ -7,7 +7,7 @@ export interface JoinTownResponse {
   providerRoomID: string
 }
 
-export interface IncommingChatMessage {
+export interface IncomingChatMessage {
   message: string;
   broadcastRadius: number;
 }
@@ -15,6 +15,6 @@ export interface IncommingChatMessage {
 export interface OutgoingChatMessage {
   sender: Player;
   message: string;
-  timestamp: string;
+  timestamp: number;
   receivingPlayers: Player[] | undefined;
 }

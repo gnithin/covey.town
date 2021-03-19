@@ -25,6 +25,7 @@ import { Callback } from './components/VideoCall/VideoFrontend/types';
 import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
+import SpatialChat from './components/spatialChat';
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -248,7 +249,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
             width: "30%",
             border: "1px dashed #000"
           }}>
-            To the open arms of the seaaaa...
+            <SpatialChat />
           </div>
         </div>
         <VideoOverlay preferredMode="fullwidth" />

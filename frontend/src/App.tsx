@@ -224,9 +224,33 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
     // } if (!videoInstance) {
     //   return <div>Loading...</div>;
     // }
+
     return (
-      <div>
-        <WorldMap />
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+      }}>
+        {/* 
+        TODO: This needs to be cleaned up. Phaser is not respecting CSS rules apparently.
+        */}
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%"
+        }}>
+          <div style={{
+            overflow: "hidden",
+            flexGrow: 4
+          }}>
+            <WorldMap />
+          </div>
+          <div style={{
+            width: "30%",
+            border: "1px dashed #000"
+          }}>
+            To the open arms of the seaaaa...
+            </div>
+        </div>
         <VideoOverlay preferredMode="fullwidth" />
       </div>
     );

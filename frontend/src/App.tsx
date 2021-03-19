@@ -249,7 +249,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
             border: "1px dashed #000"
           }}>
             To the open arms of the seaaaa...
-            </div>
+          </div>
         </div>
         <VideoOverlay preferredMode="fullwidth" />
       </div>

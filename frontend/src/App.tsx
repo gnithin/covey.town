@@ -77,6 +77,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
         const dx = p.location.x - location.x;
         const dy = p.location.y - location.y;
         const d = Math.sqrt(dx * dx + dy * dy);
+        // TODO: Abstract this out and reuse for chat as well
         return d < 80;
       }
       return false;

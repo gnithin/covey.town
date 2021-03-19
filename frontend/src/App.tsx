@@ -217,11 +217,13 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const page = useMemo(() => {
-    if (!appState.sessionToken) {
-      return <Login doLogin={setupGameController} />;
-    } if (!videoInstance) {
-      return <div>Loading...</div>;
-    }
+    // TODO: This is only temporary. This needs to be removed
+    console.log("DEBUG: REMOVE ME PLEASE!")
+    // if (!appState.sessionToken) {
+    //   return <Login doLogin={setupGameController} />;
+    // } if (!videoInstance) {
+    //   return <div>Loading...</div>;
+    // }
     return (
       <div>
         <WorldMap />

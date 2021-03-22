@@ -5,7 +5,6 @@ import Player from '../types/Player';
 import CoveyTownController from './CoveyTownController';
 import CoveyTownsStore from './CoveyTownsStore';
 import * as TestUtils from '../TestUtils';
-import TwilioVideo from './TwilioVideo';
 import { townSubscriptionHandler } from '../requestHandlers/CoveyTownRequestHandlers';
 import PlayerSession from '../types/PlayerSession';
 import { emit } from 'process';
@@ -16,6 +15,15 @@ describe('Chat Messages', () => {
     const mockSockets = [mock<Socket>(),mock<Socket>(),mock<Socket>(), mock<Socket>()]; 
     let players: Player[] = new Array(4);
     let playerSessions: PlayerSession[] = new Array(4);
+    function sendMessage(message: string, broadcastRadius : number) {
+        mockSockets[0].on.mock.calls.forEach(call => {
+            if (call[0] === 'sendChatMessage')
+                call[1]({
+                    message,
+                    broadcastRadius
+                });
+        });
+    }
 
     beforeEach(async () => {
         const roomName = `chatMessage Feature tests ${nanoid()}`;        
@@ -33,10 +41,7 @@ describe('Chat Messages', () => {
       });
     it('should broadcast message to the nearby players.',async () =>  {     
         //Send a message through the socket.
-        mockSockets[0].on.mock.calls.forEach(call => {
-                if (call[0] === 'sendChatMessage')call[1]({ message: 'Test Message1',
-                broadcastRadius: 80}); 
-              });        
+        sendMessage('Hello World', 80);        
         //Check that the  listeners get the chat message
         expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
         expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());               
@@ -71,28 +76,19 @@ describe('Chat Messages', () => {
     });
     it('Disconnected users should not receive the messages.',async () =>  {  
 
-        mockSockets[0].on.mock.calls.forEach(call => {
-            if (call[0] === 'sendChatMessage')call[1]({ message: 'Test Message4',
-            broadcastRadius: 80}); 
-          });        
+        sendMessage('Test Message4',80);
         //Check that the  listeners get the chat message
         expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());     
         mockSockets[1].on.mock.calls.forEach(call => {
             if (call[0] === 'disconnect')call[1](); 
           });                 
-        mockSockets[0].on.mock.calls.forEach(call => {
-            if (call[0] === 'sendChatMessage')call[1]({ message: 'Test Message5',
-            broadcastRadius: 80}); 
-          });  
+        sendMessage('Test Message5',80);  
         expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());     
         expect(mockSockets[1].emit).not.toBeCalledWith();     
     });
     it('message should be broadcast with the correct text.',async () =>  {             
         //Send a message through the socket.                
-        mockSockets[0].on.mock.calls.forEach(call => {
-                if (call[0] === 'sendChatMessage')call[1]({ message: 'Welcome all',
-                broadcastRadius: 80}); 
-              });        
+        sendMessage('Welcome all',80);       
         //Check that the  listeners get the chat message
         expect(mockSockets[1].emit).toHaveBeenLastCalledWith('receiveChatMessage',expect.objectContaining({message: 'Welcome all'}));           
     });
@@ -100,10 +96,7 @@ describe('Chat Messages', () => {
 
     it('message should be broadcast with the correct sender id.',async () =>  {             
         //Send a message through the socket.                
-        mockSockets[0].on.mock.calls.forEach(call => {
-                if (call[0] === 'sendChatMessage')call[1]({ message: 'Welcome all',
-                broadcastRadius: 80}); 
-              });        
+        sendMessage('Welcome all',80);      
         //Check that the  listeners get the chat message
         expect(mockSockets[1].emit).toHaveBeenLastCalledWith('receiveChatMessage',expect.objectContaining({sender: players[0] }));           
     });
@@ -113,12 +106,7 @@ describe('Chat Messages', () => {
         mockSockets[1].on.mock.calls.forEach(call => {
             if (call[0] === 'disconnect')call[1](); 
           }); 
-        mockSockets[0].on.mock.calls.forEach(call => {
-                if (call[0] === 'sendChatMessage')call[1]({ message: 'Houston, do you copy?',
-                broadcastRadius: 80}); 
-              }); 
-          
-         
+        sendMessage('Houston, do you copy?',80);                   
         //Check that the  listeners get the chat message
         expect(mockSockets[2].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({receivingPlayers : undefined}));           
         expect(mockSockets[0].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2],players[3]])}));           
@@ -127,5 +115,7 @@ describe('Chat Messages', () => {
 
 
 });
+
+
 
 

@@ -154,7 +154,7 @@ export default class CoveyTownController {
         sender,
         timestamp,
         message: incomingMessage.message,
-        receivingPlayers: session.player.id === sender.id ? receivingPlayers : undefined,
+        receivingPlayers: nearbyPlayerSession.player.id === sender.id ? receivingPlayers : undefined,
       });
     });
   }

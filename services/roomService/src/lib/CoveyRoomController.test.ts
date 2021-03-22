@@ -107,6 +107,22 @@ describe('Chat Messages', () => {
         //Check that the  listeners get the chat message
         expect(mockSockets[1].emit).toHaveBeenLastCalledWith('receiveChatMessage',expect.objectContaining({sender: players[0] }));           
     });
+    it('Only the sender should get the receiver player details of the broadcast message.',async () =>  {             
+        //Send a message through the socket.                
+        
+        mockSockets[1].on.mock.calls.forEach(call => {
+            if (call[0] === 'disconnect')call[1](); 
+          }); 
+        mockSockets[0].on.mock.calls.forEach(call => {
+                if (call[0] === 'sendChatMessage')call[1]({ message: 'Houston, do you copy?',
+                broadcastRadius: 80}); 
+              }); 
+          
+         
+        //Check that the  listeners get the chat message
+        expect(mockSockets[2].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({receivingPlayers : undefined}));           
+        expect(mockSockets[0].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2],players[3]])}));           
+    });
 
 
 

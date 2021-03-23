@@ -43,7 +43,7 @@ jobs:
         TWILIO_API_KEY_SECRET: ${{ secrets.TWILIO_API_KEY_SECRET }}
         TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
       run: | 
-        cd services/roomservice/
+        cd services/roomService/
         npm ci
         npm test
 

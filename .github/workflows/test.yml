@@ -1,0 +1,78 @@
+name: All Tests
+
+on:
+  push:
+    branches: [ master, 'ci/*' ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install dependencies and run backend test 
+      run: | 
+        cd frontend
+        npm ci
+        npm test
+    
+  test-backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install dependencies and run backend test 
+      env: 
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_API_AUTH_TOKEN: ${{ secrets.TWILIO_API_AUTH_TOKEN }}
+        TWILIO_API_KEY_SECRET: ${{ secrets.TWILIO_API_KEY_SECRET }}
+        TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
+      run: | 
+        cd services/roomService/
+        npm ci
+        npm test
+
+  deploy_frontend:
+    if: github.ref == 'refs/heads/master'
+    needs: test-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: muinmomin/webhook-action@v1.0.0
+        with:
+          url: ${{ secrets.NETLIFY_BUILD_WEBHOOK }}
+          data: "{}"
+  
+  deploy_backend:
+    if: github.ref == 'refs/heads/master'
+    needs: test-backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # Deploy to Heroku action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+
+
+
+
+
+
+

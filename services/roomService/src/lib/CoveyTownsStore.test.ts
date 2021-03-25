@@ -1,7 +1,5 @@
 import { nanoid } from 'nanoid';
 import CoveyTownsStore from './CoveyTownsStore';
-import CoveyTownListener from '../types/CoveyTownListener';
-import Player from '../types/Player';
 
 const mockCoveyListenerTownDestroyed = jest.fn();
 const mockCoveyListenerOtherFns = jest.fn();
@@ -131,81 +129,81 @@ describe('CoveyTownsStore', () => {
       expect(res)
         .toBe(false);
     });
-  describe('listTowns', () => {
-    it('Should include public towns', async () => {
-      const town = createTownForTesting(undefined, true);
-      const towns = CoveyTownsStore.getInstance()
-        .getTowns();
-      const entry = towns.filter(townInfo => townInfo.coveyTownID === town.coveyTownID);
-      expect(entry.length)
-        .toBe(1);
-      expect(entry[0].friendlyName)
-        .toBe(town.friendlyName);
-      expect(entry[0].coveyTownID)
-        .toBe(town.coveyTownID);
-    });
-    it('Should include each CoveyTownID if there are multiple towns with the same friendlyName', async () => {
-      const town = createTownForTesting(undefined, true);
-      const secondTown = createTownForTesting(town.friendlyName, true);
-      const towns = CoveyTownsStore.getInstance()
-        .getTowns()
-        .filter(townInfo => townInfo.friendlyName === town.friendlyName);
-      expect(towns.length)
-        .toBe(2);
-      expect(towns[0].friendlyName)
-        .toBe(town.friendlyName);
-      expect(towns[1].friendlyName)
-        .toBe(town.friendlyName);
-
-      if (towns[0].coveyTownID === town.coveyTownID) {
-        expect(towns[1].coveyTownID)
-          .toBe(secondTown.coveyTownID);
-      } else if (towns[1].coveyTownID === town.coveyTownID) {
-        expect(towns[0].coveyTownID)
+    describe('listTowns', () => {
+      it('Should include public towns', async () => {
+        const town = createTownForTesting(undefined, true);
+        const towns = CoveyTownsStore.getInstance()
+          .getTowns();
+        const entry = towns.filter(townInfo => townInfo.coveyTownID === town.coveyTownID);
+        expect(entry.length)
+          .toBe(1);
+        expect(entry[0].friendlyName)
+          .toBe(town.friendlyName);
+        expect(entry[0].coveyTownID)
           .toBe(town.coveyTownID);
-      } else {
-        fail('Expected the coveyTownIDs to match the towns that were created');
-      }
+      });
+      it('Should include each CoveyTownID if there are multiple towns with the same friendlyName', async () => {
+        const town = createTownForTesting(undefined, true);
+        const secondTown = createTownForTesting(town.friendlyName, true);
+        const towns = CoveyTownsStore.getInstance()
+          .getTowns()
+          .filter(townInfo => townInfo.friendlyName === town.friendlyName);
+        expect(towns.length)
+          .toBe(2);
+        expect(towns[0].friendlyName)
+          .toBe(town.friendlyName);
+        expect(towns[1].friendlyName)
+          .toBe(town.friendlyName);
 
-    });
-    it('Should not include private towns', async () => {
-      const town = createTownForTesting(undefined, false);
-      const towns = CoveyTownsStore.getInstance()
-        .getTowns()
-        .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
-      expect(towns.length)
-        .toBe(0);
-    });
-    it('Should not include private towns, even if there is a public town of same name', async () => {
-      const town = createTownForTesting(undefined, false);
-      const town2 = createTownForTesting(town.friendlyName, true);
-      const towns = CoveyTownsStore.getInstance()
-        .getTowns()
-        .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
-      expect(towns.length)
-        .toBe(1);
-      expect(towns[0].coveyTownID)
-        .toBe(town2.coveyTownID);
-      expect(towns[0].friendlyName)
-        .toBe(town2.friendlyName);
-    });
-    it('Should not include deleted towns', async () => {
-      const town = createTownForTesting(undefined, true);
-      const towns = CoveyTownsStore.getInstance()
-        .getTowns()
-        .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
-      expect(towns.length)
-        .toBe(1);
-      const res = CoveyTownsStore.getInstance()
-        .deleteTown(town.coveyTownID, town.townUpdatePassword);
-      expect(res)
-        .toBe(true);
-      const townsPostDelete = CoveyTownsStore.getInstance()
-        .getTowns()
-        .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
-      expect(townsPostDelete.length)
-        .toBe(0);
+        if (towns[0].coveyTownID === town.coveyTownID) {
+          expect(towns[1].coveyTownID)
+            .toBe(secondTown.coveyTownID);
+        } else if (towns[1].coveyTownID === town.coveyTownID) {
+          expect(towns[0].coveyTownID)
+            .toBe(town.coveyTownID);
+        } else {
+          fail('Expected the coveyTownIDs to match the towns that were created');
+        }
+
+      });
+      it('Should not include private towns', async () => {
+        const town = createTownForTesting(undefined, false);
+        const towns = CoveyTownsStore.getInstance()
+          .getTowns()
+          .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
+        expect(towns.length)
+          .toBe(0);
+      });
+      it('Should not include private towns, even if there is a public town of same name', async () => {
+        const town = createTownForTesting(undefined, false);
+        const town2 = createTownForTesting(town.friendlyName, true);
+        const towns = CoveyTownsStore.getInstance()
+          .getTowns()
+          .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
+        expect(towns.length)
+          .toBe(1);
+        expect(towns[0].coveyTownID)
+          .toBe(town2.coveyTownID);
+        expect(towns[0].friendlyName)
+          .toBe(town2.friendlyName);
+      });
+      it('Should not include deleted towns', async () => {
+        const town = createTownForTesting(undefined, true);
+        const towns = CoveyTownsStore.getInstance()
+          .getTowns()
+          .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
+        expect(towns.length)
+          .toBe(1);
+        const res = CoveyTownsStore.getInstance()
+          .deleteTown(town.coveyTownID, town.townUpdatePassword);
+        expect(res)
+          .toBe(true);
+        const townsPostDelete = CoveyTownsStore.getInstance()
+          .getTowns()
+          .filter(townInfo => townInfo.friendlyName === town.friendlyName || townInfo.coveyTownID === town.coveyTownID);
+        expect(townsPostDelete.length)
+          .toBe(0);
+      });
     });
   });
-});
 });

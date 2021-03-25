@@ -147,14 +147,11 @@ export default class CoveyTownController {
 
   private onSendChatMessage(session: PlayerSession, incomingMessage: IncomingChatMessage): void {
     const sender = session.player;
-    if(incomingMessage.broadcastRadius<0){
-      incomingMessage.broadcastRadius = 0;
-    }
     const isInChatRadius = (p: Player) => {
       const dx = p.location.x - sender.location.x;
       const dy = p.location.y - sender.location.y;
       const d = Math.sqrt(dx * dx + dy * dy);
-      return d < incomingMessage.broadcastRadius;
+      return d <= Math.max(0, incomingMessage.broadcastRadius);
     };
     const nearbyPlayerSessions = this._sessions.filter(s => isInChatRadius(s.player));
     const receivingPlayers = nearbyPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);

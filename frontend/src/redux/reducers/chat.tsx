@@ -12,7 +12,7 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
         case actionTypes.ACTION_UPDATE_CURRENT_MESSAGE:
             return {
                 ...state,
-                current_message: action.current_message
+                current_message: action.currentMessage
             }
 
         default:

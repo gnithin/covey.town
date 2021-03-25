@@ -6,23 +6,6 @@ import Player from '../types/Player';
 const mockCoveyListenerTownDestroyed = jest.fn();
 const mockCoveyListenerOtherFns = jest.fn();
 
-function mockCoveyListener(): CoveyTownListener {
-  return {
-    onPlayerDisconnected(removedPlayer: Player): void {
-      mockCoveyListenerOtherFns(removedPlayer);
-    },
-    onPlayerMoved(movedPlayer: Player): void {
-      mockCoveyListenerOtherFns(movedPlayer);
-    },
-    onTownDestroyed() {
-      mockCoveyListenerTownDestroyed();
-    },
-    onPlayerJoined(newPlayer: Player) {
-      mockCoveyListenerOtherFns(newPlayer);
-    },
-  };
-}
-
 function createTownForTesting(friendlyNameToUse?: string, isPublic = false) {
   const friendlyName = friendlyNameToUse !== undefined ? friendlyNameToUse :
     `${isPublic ? 'Public' : 'Private'}TestingTown=${nanoid()}`;
@@ -148,21 +131,6 @@ describe('CoveyTownsStore', () => {
       expect(res)
         .toBe(false);
     });
-    it('Should disconnect all players', async () => {
-      const town = createTownForTesting();
-      town.addTownListener(mockCoveyListener());
-      town.addTownListener(mockCoveyListener());
-      town.addTownListener(mockCoveyListener());
-      town.addTownListener(mockCoveyListener());
-      town.disconnectAllPlayers();
-
-      expect(mockCoveyListenerOtherFns.mock.calls.length)
-        .toBe(0);
-      expect(mockCoveyListenerTownDestroyed.mock.calls.length)
-        .toBe(4);
-    });
-  });
-
   describe('listTowns', () => {
     it('Should include public towns', async () => {
       const town = createTownForTesting(undefined, true);
@@ -240,4 +208,4 @@ describe('CoveyTownsStore', () => {
     });
   });
 });
-
+});

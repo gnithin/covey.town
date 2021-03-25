@@ -45,6 +45,7 @@ export default class CoveyTownController {
   get capacity(): number {
     return this._capacity;
   }
+
   set isPubliclyListed(value: boolean) {
     this._isPubliclyListed = value;
   }
@@ -146,6 +147,9 @@ export default class CoveyTownController {
 
   private onSendChatMessage(session: PlayerSession, incomingMessage: IncomingChatMessage): void {
     const sender = session.player;
+    if(incomingMessage.broadcastRadius<0){
+      incomingMessage.broadcastRadius = 0;
+    }
     const isInChatRadius = (p: Player) => {
       const dx = p.location.x - sender.location.x;
       const dy = p.location.y - sender.location.y;

@@ -4,7 +4,6 @@ import { Socket as ServerSocket } from 'socket.io';
 import { AddressInfo } from 'net';
 import http from 'http';
 import { UserLocation } from './CoveyTypes';
-import { OutgoingChatMessage } from './types/payloads';
 
 export type RemoteServerPlayer = {
   location: UserLocation, _userName: string, _id: string
@@ -74,11 +73,6 @@ export function createSocketClient(server: http.Server, sessionToken: string, co
   const playerDisconnectPromise = new Promise<RemoteServerPlayer>((resolve) => {
     socket.on('playerDisconnect', (player: RemoteServerPlayer) => {
       resolve(player);
-    });
-  });
-  const receiveChatMessagePromise = new Promise<OutgoingChatMessage>((resolve) => {
-    socket.on('receiveChatMessage', (message: OutgoingChatMessage) => {
-      resolve(message);
     });
   });
   createdSocketClients.push(socket);

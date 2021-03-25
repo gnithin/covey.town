@@ -7,6 +7,7 @@ import { io, Socket } from 'socket.io-client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import assert from 'assert';
+import { Provider } from "react-redux";
 import WorldMap from './components/world/WorldMap';
 import VideoOverlay from './components/VideoCall/VideoOverlay/VideoOverlay';
 import { CoveyAppState, NearbyPlayers } from './CoveyTypes';
@@ -26,9 +27,10 @@ import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
 import SpatialChat from './components/spatialChat';
+import store from './redux/store';
 
 type CoveyAppUpdate =
-  | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
+  | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string, townIsPubliclyListed: boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
   | { action: 'addPlayer'; player: Player }
   | { action: 'playerMoved'; player: Player }
   | { action: 'playerDisconnect'; player: Player }
@@ -288,11 +290,13 @@ export default function AppStateWrapper(): JSX.Element {
   return (
     <BrowserRouter>
       <ChakraProvider>
-        <MuiThemeProvider theme={theme('rgb(185, 37, 0)')}>
-          <AppStateProvider preferredMode="fullwidth" highlightedProfiles={[]}>
-            <EmbeddedTwilioAppWrapper />
-          </AppStateProvider>
-        </MuiThemeProvider>
+        <Provider store={store}>
+          <MuiThemeProvider theme={theme('rgb(185, 37, 0)')}>
+            <AppStateProvider preferredMode="fullwidth" highlightedProfiles={[]}>
+              <EmbeddedTwilioAppWrapper />
+            </AppStateProvider>
+          </MuiThemeProvider>
+        </Provider>
       </ChakraProvider>
     </BrowserRouter>
   );

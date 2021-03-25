@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { ACTION_UPDATE_CURRENT_MESSAGE } from '../../../redux/actions';
+import { updateCurrentMessageAction } from '../../../redux/actions';
 
 export const ChatInputBoxView: React.FunctionComponent = () => {
     const chat = useSelector((state: RootState) => state.chat.current_message);
@@ -15,10 +15,7 @@ export const ChatInputBoxView: React.FunctionComponent = () => {
                 size="lg"
                 value={chat}
                 onChange={(e) => {
-                    dispatch({
-                        type: ACTION_UPDATE_CURRENT_MESSAGE,
-                        current_message: e.target.value,
-                    });
+                    dispatch(updateCurrentMessageAction(e.target.value));
                 }}
             />
         </div>

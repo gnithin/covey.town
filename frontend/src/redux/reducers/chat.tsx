@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ChatReducerState } from "../reduxInterfaces";
-import { ACTION_UPDATE_CURRENT_MESSAGE } from '../actions'
+import { actionTypes } from '../actions'
 
 const initialState: ChatReducerState = {
     chats: [],
@@ -9,7 +9,7 @@ const initialState: ChatReducerState = {
 
 const chatReducer = (state: ChatReducerState = initialState, action: AnyAction): ChatReducerState => {
     switch (action.type) {
-        case ACTION_UPDATE_CURRENT_MESSAGE:
+        case actionTypes.ACTION_UPDATE_CURRENT_MESSAGE:
             return {
                 ...state,
                 current_message: action.current_message

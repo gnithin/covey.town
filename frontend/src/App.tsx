@@ -7,6 +7,7 @@ import { io, Socket } from 'socket.io-client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import assert from 'assert';
+import { Provider } from "react-redux";
 import WorldMap from './components/world/WorldMap';
 import VideoOverlay from './components/VideoCall/VideoOverlay/VideoOverlay';
 import { CoveyAppState, NearbyPlayers } from './CoveyTypes';
@@ -25,9 +26,11 @@ import { Callback } from './components/VideoCall/VideoFrontend/types';
 import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
+import SpatialChat from './components/spatialChat';
+import store from './redux/store';
 
 type CoveyAppUpdate =
-  | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
+  | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string, townIsPubliclyListed: boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
   | { action: 'addPlayer'; player: Player }
   | { action: 'playerMoved'; player: Player }
   | { action: 'playerDisconnect'; player: Player }
@@ -76,6 +79,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
         const dx = p.location.x - location.x;
         const dy = p.location.y - location.y;
         const d = Math.sqrt(dx * dx + dy * dy);
+        // TODO: Abstract this out and reuse for chat as well
         return d < 80;
       }
       return false;
@@ -217,14 +221,40 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const page = useMemo(() => {
-    if (!appState.sessionToken) {
-      return <Login doLogin={setupGameController} />;
-    } if (!videoInstance) {
-      return <div>Loading...</div>;
-    }
+    // TODO: This is only temporary. This needs to be removed
+    console.log("DEBUG: REMOVE ME PLEASE!")
+    // if (!appState.sessionToken) {
+    //   return <Login doLogin={setupGameController} />;
+    // } if (!videoInstance) {
+    //   return <div>Loading...</div>;
+    // }
+
     return (
-      <div>
-        <WorldMap />
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+      }}>
+        {/* 
+        TODO: This needs to be cleaned up. Phaser is not respecting CSS rules apparently.
+        */}
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%"
+        }}>
+          <div style={{
+            overflow: "hidden",
+            flexGrow: 4
+          }}>
+            <WorldMap />
+          </div>
+          <div style={{
+            width: "30%",
+            border: "1px dashed #000"
+          }}>
+            <SpatialChat />
+          </div>
+        </div>
         <VideoOverlay preferredMode="fullwidth" />
       </div>
     );
@@ -260,11 +290,13 @@ export default function AppStateWrapper(): JSX.Element {
   return (
     <BrowserRouter>
       <ChakraProvider>
-        <MuiThemeProvider theme={theme('rgb(185, 37, 0)')}>
-          <AppStateProvider preferredMode="fullwidth" highlightedProfiles={[]}>
-            <EmbeddedTwilioAppWrapper />
-          </AppStateProvider>
-        </MuiThemeProvider>
+        <Provider store={store}>
+          <MuiThemeProvider theme={theme('rgb(185, 37, 0)')}>
+            <AppStateProvider preferredMode="fullwidth" highlightedProfiles={[]}>
+              <EmbeddedTwilioAppWrapper />
+            </AppStateProvider>
+          </MuiThemeProvider>
+        </Provider>
       </ChakraProvider>
     </BrowserRouter>
   );

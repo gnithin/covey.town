@@ -8,3 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default store;
+
+// Infer the types for the root state and dispatch
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;

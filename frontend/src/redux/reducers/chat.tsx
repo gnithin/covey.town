@@ -1,11 +1,15 @@
-const initialState = {
+import { AnyAction } from 'redux';
+import { ChatReducerState } from "../reduxInterfaces";
+import { ACTION_UPDATE_CURRENT_MESSAGE } from '../actions'
+
+const initialState: ChatReducerState = {
     chats: [],
     current_message: ""
 };
 
-const chatReducer = (state = initialState, action) => {
+const chatReducer = (state: ChatReducerState = initialState, action: AnyAction): ChatReducerState => {
     switch (action.type) {
-        case "update_current_message":
+        case ACTION_UPDATE_CURRENT_MESSAGE:
             return {
                 ...state,
                 current_message: action.current_message

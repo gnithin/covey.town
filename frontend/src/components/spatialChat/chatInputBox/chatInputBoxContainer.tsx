@@ -22,15 +22,17 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
     }
 
     return (
-        <ChatInputBoxView
-            value={chat}
-            onInputChanged={(inputValue) => {
-                dispatch(updateCurrentMessageAction(inputValue));
-            }}
-            onInputSubmit={async () => {
-                sendChatMessage();
-            }}
-        />
+        <div data-testid="chat-input-box-wrapper">
+            <ChatInputBoxView
+                value={chat}
+                onInputChanged={(inputValue) => {
+                    dispatch(updateCurrentMessageAction(inputValue));
+                }}
+                onInputSubmit={async () => {
+                    sendChatMessage();
+                }}
+            />
+        </div>
     )
 };
 

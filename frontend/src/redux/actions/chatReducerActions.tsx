@@ -1,8 +1,13 @@
 import { AnyAction } from "redux";
+import { ChatEntry } from "../../classes/SpatialChat";
 import actionTypes from "./actionTypes";
 
-const updateCurrentMessageAction = (currentMessage: string): AnyAction => ({
+export const updateCurrentMessageAction = (currentMessage: string): AnyAction => ({
     type: actionTypes.ACTION_UPDATE_CURRENT_MESSAGE,
     currentMessage
 })
-export default updateCurrentMessageAction;
+
+export const addNewChatEntryAction = (chatEntry: ChatEntry): AnyAction => ({
+    type: actionTypes.ACTION_ADD_CHAT_ENTRY,
+    chatEntry,
+});

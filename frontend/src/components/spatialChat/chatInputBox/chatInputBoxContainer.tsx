@@ -15,6 +15,9 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
             message: chat,
             borderRadius: 80,
         });
+
+        // Set the input to empty after submitting
+        dispatch(updateCurrentMessageAction(""));
     }
 
     return (

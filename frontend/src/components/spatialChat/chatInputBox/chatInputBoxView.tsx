@@ -1,10 +1,6 @@
 import React from 'react';
 import { Input } from '@chakra-ui/react'
-
-interface IChatInputBoxView {
-    value: string;
-    onInputChanged: (inputValue: string) => void;
-}
+import IChatInputBoxView from './IChatInputBoxView';
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     { value, onInputChanged }: IChatInputBoxView) => (

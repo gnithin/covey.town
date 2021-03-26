@@ -9,6 +9,7 @@ import reducer from '../../../redux/reducers';
 import { ChatEntry } from '../../../classes/SpatialChat';
 import Player from '../../../classes/Player';
 
+// A custom renderer that'll wrap the given element within a redux-provider
 const render = (
     ui: ReactElement,
     {
@@ -23,6 +24,7 @@ const render = (
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
+// Helper method to create initial state with chat-entries
 const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
     return {
         chat: {
@@ -32,6 +34,7 @@ const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
     }
 }
 
+// Helper method to create a chat-entry
 const createChatEntryForMessage = (message: string) => {
     return new ChatEntry(
         new Player(`dummy-id-${new Date().getTime()}`, "dummy-name", {
@@ -47,24 +50,11 @@ const createChatEntryForMessage = (message: string) => {
 }
 
 describe('Rendering the conversations list view', () => {
-    it('Test for presence of chat entries in the conversations list view', () => {
-        const messages = [
-            "Hey how are you",
-            "I'm depressed. How about you?",
-            "Same here. Jinx!",
-        ];
-
+    it('Test if the conversations list wrapper is loaded on the screen', () => {
         const renderedElement = render(
             <ConversationsListView />,
-            {
-                initialState: createInitialStateWithChatEntries(
-                    messages.map(createChatEntryForMessage)
-                )
-            }
         );
-        for (const msg of messages) {
-            renderedElement.getByText(msg);
-        }
+        renderedElement.getByTestId("conversations-wrapper");
     })
 
     it('Test for presence of chat entries in the conversations list view', () => {
@@ -72,6 +62,8 @@ describe('Rendering the conversations list view', () => {
             "Hey how are you",
             "I'm depressed. How about you?",
             "Same here. Jinx!",
+            "How's the weather?",
+            "Horrible!"
         ];
 
         const renderedElement = render(

@@ -6,7 +6,7 @@ import { RootState } from '../../../redux/store'
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
     return (
-        <div>
+        <div data-testid="conversations-wrapper">
             <ul>
                 Conversations List view
                 {

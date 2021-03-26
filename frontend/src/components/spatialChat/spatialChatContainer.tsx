@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
@@ -20,7 +21,9 @@ export const SpatialChatContainer: React.FunctionComponent = () => {
         <div>
             Spatial chat container
             <ConversationsList />
-            <ChatInputBox />
+            <Box pos="absolute" bottom="0" width="30%" height="75px">
+                <ChatInputBox />
+            </Box>
         </div>
     )
 };

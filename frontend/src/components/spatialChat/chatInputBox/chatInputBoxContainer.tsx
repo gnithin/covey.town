@@ -4,6 +4,7 @@ import { RootState } from '../../../redux/store';
 import { updateCurrentMessageAction } from '../../../redux/actions';
 import ChatInputBoxView from './chatInputBoxView';
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
+import Constants from '../../../constants';
 
 const ChatInputBoxContainer: React.FunctionComponent = () => {
     const chat = useSelector((state: RootState) => state.chat.current_message);
@@ -13,7 +14,7 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
     const sendChatMessage = () => {
         socket?.emit('sendChatMessage', {
             message: chat,
-            borderRadius: 80,
+            broadcastRadius: Constants.DEFAULT_BROADCAST_RADIUS,
         });
 
         // Set the input to empty after submitting

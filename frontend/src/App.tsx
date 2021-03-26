@@ -28,6 +28,7 @@ import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClie
 import Video from './classes/Video/Video';
 import SpatialChat from './components/spatialChat';
 import store from './redux/store';
+import Constants from './constants';
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string, townIsPubliclyListed: boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -79,8 +80,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
         const dx = p.location.x - location.x;
         const dy = p.location.y - location.y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        // TODO: Abstract this out and reuse for chat as well
-        return d < 80;
+        return d < Constants.DEFAULT_BROADCAST_RADIUS;
       }
       return false;
     };

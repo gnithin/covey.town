@@ -25,7 +25,7 @@ export class ChatEntry {
     }
 
     generateKey(): string {
-        return `${this.sender}-${this.timestamp}-${this.message}`;
+        return `${this.sender.id}-${this.timestamp}-${this.message}`;
     }
 
     static fromServerChat(serverChatEntry: ServerChatEntry): ChatEntry {

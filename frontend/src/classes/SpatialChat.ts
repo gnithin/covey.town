@@ -24,6 +24,10 @@ export class ChatEntry {
         this.receivingPlayers = receivingPlayers;
     }
 
+    generateKey(): string {
+        return `${this.sender}-${this.timestamp}-${this.message}`;
+    }
+
     static fromServerChat(serverChatEntry: ServerChatEntry): ChatEntry {
         const serverReceivingPlayers = serverChatEntry.receivingPlayers;
         let receivingPlayers;

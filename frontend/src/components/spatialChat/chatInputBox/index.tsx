@@ -1,3 +1,3 @@
-import ChatInputBox from './chatInputBoxView';
+import ChatInputBox from './chatInputBoxContainer';
 
 export default ChatInputBox;

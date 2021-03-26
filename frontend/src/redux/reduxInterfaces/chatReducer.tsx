@@ -1,8 +1,6 @@
-export interface Chat {
-    message: string;
-}
+import { ChatEntry } from "../../classes/SpatialChat";
 
 export interface ChatReducerState {
-    chats: Chat[];
+    chats: ChatEntry[];
     current_message: string;
 }

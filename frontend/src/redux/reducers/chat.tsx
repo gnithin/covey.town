@@ -13,7 +13,16 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
             return {
                 ...state,
                 current_message: action.currentMessage
-            }
+            };
+
+        case actionTypes.ACTION_ADD_CHAT_ENTRY:
+            return {
+                ...state,
+                chats: [
+                    ...state.chats,
+                    action.chatEntry,
+                ]
+            };
 
         default:
             return state;

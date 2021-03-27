@@ -23,11 +23,9 @@ export const SpatialChatContainer: React.FunctionComponent = () => {
             Spatial chat container
             <Divider orientation="horizontal" />
             <Box backgroundColor='#F0FFF4' w="100%" height={690}>
-            <ConversationsList />
+                <ConversationsList />
             </Box>
-            <Box pos="absolute" bottom="0" width="30%" height="75px">
                 <ChatInputBox />
-            </Box>
         </div>
     )
 };

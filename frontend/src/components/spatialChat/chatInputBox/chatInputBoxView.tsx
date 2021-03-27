@@ -1,25 +1,31 @@
 import React from 'react';
-import { Input } from '@chakra-ui/react'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { updateCurrentMessageAction } from '../../../redux/actions';
+import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import IChatInputBoxView from './IChatInputBoxView';
 
-export const ChatInputBoxView: React.FunctionComponent = () => {
-    const chat = useSelector((state: RootState) => state.chat.current_message);
-    const dispatch = useDispatch();
-
-    return (
-        <div className="chat-box-container">
+const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
+    { value, onInputChanged, onInputSubmit }: IChatInputBoxView) => (
+    <div className="chat-box-container">
+        <InputGroup size="md">
             <Input
                 placeholder="Say Something..."
                 size="lg"
-                value={chat}
+                value={value}
                 onChange={(e) => {
-                    dispatch(updateCurrentMessageAction(e.target.value));
+                    onInputChanged(e.target.value);
+                }}
+                onKeyPress={async (e) => {
+                    if (e.key === "Enter") {
+                        await onInputSubmit();
+                    }
                 }}
             />
-        </div>
-    )
-};
+            <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={onInputSubmit} colorScheme="teal">
+                    send
+                </Button>
+            </InputRightElement>
+        </InputGroup>
+    </div>
+);
 
 export default ChatInputBoxView;

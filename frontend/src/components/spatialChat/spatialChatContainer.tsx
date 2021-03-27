@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Box, Divider } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
 import useCoveyAppState from '../../hooks/useCoveyAppState';

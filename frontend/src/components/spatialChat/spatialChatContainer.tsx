@@ -5,6 +5,7 @@ import ChatInputBox from './chatInputBox';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import { ServerChatEntry, ChatEntry } from '../../classes/SpatialChat';
 import { addNewChatEntryAction } from '../../redux/actions'
+import constants from '../../constants';
 
 
 export const SpatialChatContainer: React.FunctionComponent = () => {
@@ -27,7 +28,9 @@ export const SpatialChatContainer: React.FunctionComponent = () => {
     }, [socket, dispatch])
 
     return (
-        <div>
+        <div style={{
+            height: constants.PHASER_HEIGHT
+        }}>
             <ConversationsList />
             <ChatInputBox />
         </div>

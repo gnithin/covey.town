@@ -437,7 +437,7 @@ export default function WorldMap(): JSX.Element {
     const config = {
       type: Phaser.AUTO,
       parent: 'map-container',
-      minHeight: 600,
+      height: Constants.PHASER_HEIGHT,
       physics: {
         default: 'arcade',
         arcade: {

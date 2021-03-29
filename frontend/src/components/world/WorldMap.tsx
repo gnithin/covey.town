@@ -436,7 +436,6 @@ export default function WorldMap(): JSX.Element {
     const config = {
       type: Phaser.AUTO,
       parent: 'map-container',
-      minWidth: 800,
       minHeight: 600,
       physics: {
         default: 'arcade',
@@ -458,6 +457,19 @@ export default function WorldMap(): JSX.Element {
         newGameScene.resume();
       }
     }
+
+    const SCREEN_DIMENSION = 0.7;
+
+    window.addEventListener('load', () => {
+      console.log('DEBUG: Setting game width', window.innerWidth * SCREEN_DIMENSION);
+      game.canvas.setAttribute('width', `${window.innerWidth * SCREEN_DIMENSION}`);
+    });
+
+    window.addEventListener('resize', () => {
+      console.log('DEBUG: Setting resize width', window.innerWidth * SCREEN_DIMENSION);
+      game.canvas.setAttribute('width', `${window.innerWidth * SCREEN_DIMENSION}`);
+    });
+
     return () => {
       game.destroy(true);
     };

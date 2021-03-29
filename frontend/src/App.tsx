@@ -243,8 +243,8 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
           width: "100%"
         }}>
           <div style={{
+            width: "70%",
             overflow: "hidden",
-            flexGrow: 4
           }}>
             <WorldMap />
           </div>

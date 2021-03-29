@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import Constants from '../../constants';
 
 // https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 class CoveyGameScene extends Phaser.Scene {
@@ -458,16 +459,12 @@ export default function WorldMap(): JSX.Element {
       }
     }
 
-    const SCREEN_DIMENSION = 0.7;
-
     window.addEventListener('load', () => {
-      console.log('DEBUG: Setting game width', window.innerWidth * SCREEN_DIMENSION);
-      game.canvas.setAttribute('width', `${window.innerWidth * SCREEN_DIMENSION}`);
+      game.canvas.setAttribute('width', `${window.innerWidth * Constants.PHASER_PROPORTION_OF_SCREEN}`);
     });
 
     window.addEventListener('resize', () => {
-      console.log('DEBUG: Setting resize width', window.innerWidth * SCREEN_DIMENSION);
-      game.canvas.setAttribute('width', `${window.innerWidth * SCREEN_DIMENSION}`);
+      game.canvas.setAttribute('width', `${window.innerWidth * Constants.PHASER_PROPORTION_OF_SCREEN}`);
     });
 
     return () => {

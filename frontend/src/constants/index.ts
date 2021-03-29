@@ -1,3 +1,4 @@
 export default {
     DEFAULT_BROADCAST_RADIUS: 80,
+    PHASER_PROPORTION_OF_SCREEN: 0.7,
 }

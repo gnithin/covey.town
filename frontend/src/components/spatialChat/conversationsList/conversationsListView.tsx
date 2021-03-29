@@ -12,7 +12,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                 {
                     chatList.map((chatEntry) => (
                         <Box key={chatEntry.generateKey()}>
-                            <Text>{`@${chatEntry.timestamp} ${chatEntry.sender}`}</Text>
+                            <Text>{`@${chatEntry.timestamp} ${chatEntry.sender.userName}`}</Text>
                             <Tag size="lg" variant="solid" colorScheme='blue'>{chatEntry.message}</Tag>
                         </Box >
                     ))

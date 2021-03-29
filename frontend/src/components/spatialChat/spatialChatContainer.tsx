@@ -11,12 +11,19 @@ export const SpatialChatContainer: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const { socket } = useCoveyAppState();
 
+
     useEffect(() => {
-        socket?.on('receiveChatMessage', (receiveChatMessage: ServerChatEntry) => {
+        const receiveChatMessageListener = (receiveChatMessage: ServerChatEntry) => {
             dispatch(
                 addNewChatEntryAction(ChatEntry.fromServerChat(receiveChatMessage))
             );
-        });
+        };
+
+        socket?.on('receiveChatMessage', receiveChatMessageListener);
+        return () => {
+            // Unsubscribe to the current listener
+            socket?.off('receiveChatMessage', receiveChatMessageListener);
+        }
     }, [socket, dispatch])
 
     return (

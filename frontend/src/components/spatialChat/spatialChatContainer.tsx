@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
@@ -9,13 +9,15 @@ import { addNewChatEntryAction } from '../../redux/actions'
 
 export const SpatialChatContainer: React.FunctionComponent = () => {
     const dispatch = useDispatch();
-
     const { socket } = useCoveyAppState();
-    socket?.on('receiveChatMessage', (receiveChatMessage: ServerChatEntry) => {
-        dispatch(
-            addNewChatEntryAction(ChatEntry.fromServerChat(receiveChatMessage))
-        );
-    });
+
+    useEffect(() => {
+        socket?.on('receiveChatMessage', (receiveChatMessage: ServerChatEntry) => {
+            dispatch(
+                addNewChatEntryAction(ChatEntry.fromServerChat(receiveChatMessage))
+            );
+        });
+    }, [socket, dispatch])
 
     return (
         <div>

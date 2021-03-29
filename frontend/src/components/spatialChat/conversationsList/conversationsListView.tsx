@@ -19,7 +19,6 @@ export const ConversationsListView: React.FunctionComponent = () => {
                 }
             </Stack>
         </Box>
-
     );
 };
 

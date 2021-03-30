@@ -1,6 +1,7 @@
-import { HStack, Tag, VStack, Text, Stack, Box, Heading, Container } from '@chakra-ui/react';
+import { Tag, Text, Stack, Box } from '@chakra-ui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import moment from 'moment'
 import { ChatEntry } from '../../../classes/SpatialChat';
 import { RootState } from '../../../redux/store'
 
@@ -11,9 +12,29 @@ export const ConversationsListView: React.FunctionComponent = () => {
             <Stack spacing={4}>
                 {
                     chatList.map((chatEntry) => (
-                        <Box key={chatEntry.generateKey()}>
-                            <Text>{`@${chatEntry.timestamp} ${chatEntry.sender.userName}`}</Text>
-                            <Tag size="lg" variant="solid" colorScheme='blue'>{chatEntry.message}</Tag>
+                        <Box key={chatEntry.generateKey()} style={{
+                            textAlign: "left"
+                        }}>
+                            <Text>
+                                <span style={{
+                                    fontSize: "90%",
+                                    fontWeight: "bold"
+                                }}>
+                                    {chatEntry.sender.userName}
+                                </span>
+                                <span style={{
+                                    fontSize: "70%",
+                                    marginLeft: "3px",
+                                }}>
+                                    <i>{moment(chatEntry.timestamp).fromNow()}</i>
+                                </span>
+                            </Text>
+                            <Tag size="lg" variant="solid" style={{
+                                backgroundColor: 'rgb(189, 255, 207)',
+                                color: "#000",
+                            }}>
+                                {chatEntry.message}
+                            </Tag>
                         </Box >
                     ))
                 }

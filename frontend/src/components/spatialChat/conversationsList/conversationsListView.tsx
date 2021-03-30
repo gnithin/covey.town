@@ -55,7 +55,10 @@ export const ConversationsListView: React.FunctionComponent = () => {
                                     fontSize: "90%",
                                     fontWeight: "bold"
                                 }}>
-                                    {chatEntry.sender.userName}
+                                    {
+                                        (chatEntry.sender.userName === userName) ?
+                                            "Me" : chatEntry.sender.userName
+                                    }
                                 </span>
                                 <span style={{
                                     fontSize: "70%",

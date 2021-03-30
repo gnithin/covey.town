@@ -438,6 +438,9 @@ export default function WorldMap(): JSX.Element {
       type: Phaser.AUTO,
       parent: 'map-container',
       height: Constants.PHASER_HEIGHT,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+      },
       physics: {
         default: 'arcade',
         arcade: {

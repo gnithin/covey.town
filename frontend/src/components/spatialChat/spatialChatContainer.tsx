@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
-import useCoveyAppState from '../../hooks/useCoveyAppState';
 import { ServerChatEntry, ChatEntry } from '../../classes/SpatialChat';
 import { addNewChatEntryAction } from '../../redux/actions'
 import constants from '../../constants';

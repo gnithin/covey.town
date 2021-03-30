@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons';
 import IChatInputBoxView from './IChatInputBoxView';
-
+import Constants from '../../../constants';
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     { value, onInputChanged, onInputSubmit }: IChatInputBoxView) => (
@@ -26,6 +26,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     await onInputSubmit();
                 }
             }}
+            className={Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT}
         />
         <Button
             onClick={onInputSubmit}

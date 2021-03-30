@@ -462,6 +462,26 @@ export default function WorldMap(): JSX.Element {
       }
     }
 
+    // Toggling keyboard based off of input focus class
+    window.addEventListener('focusin', (e) => {
+      if (e.target &&
+        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+      ) {
+        game.input.keyboard.enabled = false;
+      }
+    });
+
+    window.addEventListener('focusout', (e) => {
+      if (
+        !game.input.keyboard.enabled &&
+        e.target &&
+        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+      ) {
+        game.input.keyboard.enabled = true;
+      }
+    });
+
+    // Set the width of the phaser canvas on load and re-size
     window.addEventListener('load', () => {
       game.canvas.setAttribute('width', `${window.innerWidth * Constants.PHASER_PROPORTION_OF_SCREEN}`);
     });

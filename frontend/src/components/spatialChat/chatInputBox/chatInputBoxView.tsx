@@ -34,6 +34,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                 padding: 0,
                 backgroundColor: '#BDFFCF',
             }}
+            aria-label='send-chat'
         >
             <ChatIcon />
         </Button>

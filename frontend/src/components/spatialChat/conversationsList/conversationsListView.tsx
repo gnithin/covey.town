@@ -1,10 +1,26 @@
-import { Tag, Text, Stack, Box } from '@chakra-ui/react';
+import {
+    Tag, Text, Stack, Box,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Button,
+    MenuItemOption,
+    MenuGroup,
+    MenuOptionGroup,
+    MenuIcon,
+    MenuCommand,
+    MenuDivider,
+} from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment'
 import { ChatEntry } from '../../../classes/SpatialChat';
 import { RootState } from '../../../redux/store'
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
+import ConversationView from './conversationView';
 
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
@@ -48,14 +64,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                                     <i>{moment(chatEntry.timestamp).fromNow()}</i>
                                 </span>
                             </Text>
-                            <Tag size="lg" variant="solid" style={{
-                                backgroundColor: 'rgb(189, 255, 207)',
-                                color: "#000",
-                                textAlign: 'left',
-                                padding: "10px",
-                            }}>
-                                {chatEntry.message}
-                            </Tag>
+                            <ConversationView chatEntry={chatEntry} />
                         </Box >
                     ))
                 }
@@ -65,3 +74,4 @@ export const ConversationsListView: React.FunctionComponent = () => {
 };
 
 export default ConversationsListView;
+

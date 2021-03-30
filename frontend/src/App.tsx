@@ -250,7 +250,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
           </div>
           <div style={{
             width: "30%",
-            border: "1px dashed #000"
+            border: "2px solid rgb(189, 255, 207)"
           }}>
             <SpatialChat />
           </div>

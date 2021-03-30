@@ -252,7 +252,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
             width: "30%",
             border: "2px solid rgb(189, 255, 207)"
           }}>
-            <SpatialChat />
+            <SpatialChat socket={appState.socket} />
           </div>
         </div>
         <VideoOverlay preferredMode="fullwidth" />

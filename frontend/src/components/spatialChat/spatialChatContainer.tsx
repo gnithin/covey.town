@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Socket } from 'socket.io-client';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
@@ -7,12 +8,12 @@ import { ServerChatEntry, ChatEntry } from '../../classes/SpatialChat';
 import { addNewChatEntryAction } from '../../redux/actions'
 import constants from '../../constants';
 
+interface ISpatialChatContainerProps {
+    socket: Socket | null
+}
 
-export const SpatialChatContainer: React.FunctionComponent = () => {
+export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainerProps> = ({ socket }: ISpatialChatContainerProps) => {
     const dispatch = useDispatch();
-    const { socket } = useCoveyAppState();
-
-
     useEffect(() => {
         const receiveChatMessageListener = (receiveChatMessage: ServerChatEntry) => {
             dispatch(

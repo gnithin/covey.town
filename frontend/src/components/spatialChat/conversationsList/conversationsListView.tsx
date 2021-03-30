@@ -1,5 +1,5 @@
 import { Tag, Text, Stack, Box } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment'
 import { ChatEntry } from '../../../classes/SpatialChat';
@@ -7,11 +7,24 @@ import { RootState } from '../../../redux/store'
 
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
+    const parentRef = useRef(null);
+    useEffect(() => {
+        if (parentRef) {
+            const currentNode = (parentRef.current as any);
+            currentNode.scrollTop = currentNode.scrollHeight;
+        }
+    }, [parentRef, chatList]);
+
     return (
-        <Box data-testid="conversations-wrapper" style={{
-            height: "100%",
-            overflow: "scroll"
-        }}>
+        <Box
+            data-testid="conversations-wrapper"
+            style={{
+                height: "100%",
+                overflow: "scroll",
+                marginBottom: "10px",
+            }}
+            ref={parentRef}
+        >
             <Stack spacing={4}>
                 {
                     chatList.map((chatEntry) => (

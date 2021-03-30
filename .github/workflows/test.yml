@@ -44,7 +44,7 @@ jobs:
         TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
       run: | 
         cd services/roomService/
-        npm ci
+        npm install
         npm test
 
   deploy_frontend:
@@ -69,10 +69,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-
-
-
-
-
-
 

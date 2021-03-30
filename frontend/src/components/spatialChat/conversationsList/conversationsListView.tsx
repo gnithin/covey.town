@@ -64,7 +64,10 @@ export const ConversationsListView: React.FunctionComponent = () => {
                                     <i>{moment(chatEntry.timestamp).fromNow()}</i>
                                 </span>
                             </Text>
-                            <ConversationView chatEntry={chatEntry} />
+                            <ConversationView
+                                chatEntry={chatEntry}
+                                loggedInUsername={userName}
+                            />
                         </Box >
                     ))
                 }

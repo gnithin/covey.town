@@ -14,10 +14,30 @@ import { ChatEntry } from '../../../classes/SpatialChat';
 
 interface IConversationView {
     chatEntry: ChatEntry;
+    loggedInUsername: string;
 }
 
-const ConversationView: React.FunctionComponent<IConversationView> = ({ chatEntry }: IConversationView) => {
+const ConversationView: React.FunctionComponent<IConversationView> = (
+    { chatEntry, loggedInUsername }: IConversationView
+) => {
     const [displayMenu, setDisplayMenu] = useState(false);
+
+    const renderMenuItems = () => {
+        if (chatEntry.sender.userName === loggedInUsername) {
+            return (
+                <MenuGroup title="Sent To">
+                    {chatEntry.receivingPlayers?.map((sentTo) => (
+                        <MenuItem key={sentTo.id} isFocusable={false}>{sentTo.userName}</MenuItem>
+                    ))}
+                </MenuGroup>
+            )
+        }
+
+        // TODO: This needs to be done :)
+        return (
+            <MenuItem>Block User</MenuItem>
+        )
+    };
 
     return (
         <>
@@ -49,11 +69,7 @@ const ConversationView: React.FunctionComponent<IConversationView> = ({ chatEntr
                             <ChevronDownIcon />
                         </MenuButton>
                         <MenuList>
-                            <MenuGroup title="Sent To">
-                                {chatEntry.receivingPlayers?.map((sentTo) => (
-                                    <MenuItem key={sentTo.id} isFocusable={false}>{sentTo.userName}</MenuItem>
-                                ))}
-                            </MenuGroup>
+                            {renderMenuItems()}
                         </MenuList>
                     </Menu>
                 </div>

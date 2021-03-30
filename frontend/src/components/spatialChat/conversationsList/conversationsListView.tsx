@@ -4,10 +4,13 @@ import { useSelector } from 'react-redux';
 import moment from 'moment'
 import { ChatEntry } from '../../../classes/SpatialChat';
 import { RootState } from '../../../redux/store'
+import useCoveyAppState from '../../../hooks/useCoveyAppState';
 
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
     const parentRef = useRef(null);
+    const { userName } = useCoveyAppState();
+
     useEffect(() => {
         if (parentRef) {
             const currentNode = (parentRef.current as any);
@@ -21,7 +24,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
             style={{
                 height: "100%",
                 overflow: "scroll",
-                paddingBottom: "10px",
+                padding: "10px 10px",
             }}
             ref={parentRef}
         >
@@ -29,7 +32,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                 {
                     chatList.map((chatEntry) => (
                         <Box key={chatEntry.generateKey()} style={{
-                            textAlign: "left"
+                            textAlign: (chatEntry.sender.userName === userName) ? "right" : "left",
                         }}>
                             <Text>
                                 <span style={{

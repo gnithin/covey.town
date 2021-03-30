@@ -223,11 +223,11 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   const page = useMemo(() => {
     // TODO: This is only temporary. This needs to be removed
     console.log("DEBUG: REMOVE ME PLEASE!")
-    // if (!appState.sessionToken) {
-    //   return <Login doLogin={setupGameController} />;
-    // } if (!videoInstance) {
-    //   return <div>Loading...</div>;
-    // }
+    if (!appState.sessionToken) {
+      return <Login doLogin={setupGameController} />;
+    } if (!videoInstance) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div style={{

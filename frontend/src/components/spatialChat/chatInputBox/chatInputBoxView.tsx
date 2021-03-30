@@ -30,6 +30,10 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
         <Button
             onClick={onInputSubmit}
             size="lg"
+            style={{
+                padding: 0,
+                backgroundColor: '#BDFFCF',
+            }}
         >
             <ChatIcon />
         </Button>

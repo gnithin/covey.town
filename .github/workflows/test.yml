@@ -44,7 +44,7 @@ jobs:
         TWILIO_API_KEY_SID: ${{ secrets.TWILIO_API_KEY_SID }}
       run: | 
         cd services/roomService/
-        npm install --also=dev
+        npm ci
         npm test
 
   deploy_frontend:

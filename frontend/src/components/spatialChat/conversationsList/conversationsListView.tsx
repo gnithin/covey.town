@@ -51,6 +51,8 @@ export const ConversationsListView: React.FunctionComponent = () => {
                             <Tag size="lg" variant="solid" style={{
                                 backgroundColor: 'rgb(189, 255, 207)',
                                 color: "#000",
+                                textAlign: 'left',
+                                padding: "10px",
                             }}>
                                 {chatEntry.message}
                             </Tag>

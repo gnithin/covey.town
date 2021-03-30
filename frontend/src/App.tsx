@@ -223,11 +223,11 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   const page = useMemo(() => {
     // TODO: This is only temporary. This needs to be removed
     console.log("DEBUG: REMOVE ME PLEASE!")
-    // if (!appState.sessionToken) {
-    //   return <Login doLogin={setupGameController} />;
-    // } if (!videoInstance) {
-    //   return <div>Loading...</div>;
-    // }
+    if (!appState.sessionToken) {
+      return <Login doLogin={setupGameController} />;
+    } if (!videoInstance) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div style={{
@@ -243,16 +243,16 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
           width: "100%"
         }}>
           <div style={{
+            width: "70%",
             overflow: "hidden",
-            flexGrow: 4
           }}>
             <WorldMap />
           </div>
           <div style={{
             width: "30%",
-            border: "1px dashed #000"
+            border: "2px solid rgb(189, 255, 207)"
           }}>
-            <SpatialChat />
+            <SpatialChat socket={appState.socket} />
           </div>
         </div>
         <VideoOverlay preferredMode="fullwidth" />

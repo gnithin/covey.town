@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import Constants from '../../constants';
 
 // https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 class CoveyGameScene extends Phaser.Scene {
@@ -244,16 +245,16 @@ class CoveyGameScene extends Phaser.Scene {
     // for reasons that are not obvious to me, but this seems to work. We also set them to be invisible
     // but for debugging, you can comment out that line.
     transporters.forEach(transporter => {
-        const sprite = transporter as Phaser.GameObjects.Sprite;
-        sprite.y += 2 * sprite.height; // Phaser and Tiled seem to disagree on which corner is y
-        sprite.setVisible(false); // Comment this out to see the transporter rectangles drawn on
-                                  // the map
-      }
+      const sprite = transporter as Phaser.GameObjects.Sprite;
+      sprite.y += 2 * sprite.height; // Phaser and Tiled seem to disagree on which corner is y
+      sprite.setVisible(false); // Comment this out to see the transporter rectangles drawn on
+      // the map
+    }
     );
 
-    const labels = map.filterObjects('Objects',(obj)=>obj.name==='label');
+    const labels = map.filterObjects('Objects', (obj) => obj.name === 'label');
     labels.forEach(label => {
-      if(label.x && label.y){
+      if (label.x && label.y) {
         this.add.text(label.x, label.y, label.text.text, {
           color: '#FFFFFF',
           backgroundColor: '#000000',
@@ -305,25 +306,25 @@ class CoveyGameScene extends Phaser.Scene {
     of the transporter.
      */
     this.physics.add.overlap(sprite, transporters,
-      (overlappingObject, transporter)=>{
-      if(cursorKeys.space.isDown && this.player){
-        // In the tiled editor, set the 'target' to be an *object* pointer
-        // Here, we'll see just the ID, then find the object by ID
-        const transportTargetID = transporter.getData('target') as number;
-        const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
-        if(target && target.x && target.y && this.lastLocation){
-          // Move the player to the target, update lastLocation and send it to other players
-          this.player.sprite.x = target.x;
-          this.player.sprite.y = target.y;
-          this.lastLocation.x = target.x;
-          this.lastLocation.y = target.y;
-          this.emitMovement(this.lastLocation);
+      (overlappingObject, transporter) => {
+        if (cursorKeys.space.isDown && this.player) {
+          // In the tiled editor, set the 'target' to be an *object* pointer
+          // Here, we'll see just the ID, then find the object by ID
+          const transportTargetID = transporter.getData('target') as number;
+          const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+          if (target && target.x && target.y && this.lastLocation) {
+            // Move the player to the target, update lastLocation and send it to other players
+            this.player.sprite.x = target.x;
+            this.player.sprite.y = target.y;
+            this.lastLocation.x = target.x;
+            this.lastLocation.y = target.y;
+            this.emitMovement(this.lastLocation);
+          }
+          else {
+            throw new Error(`Unable to find target object ${target}`);
+          }
         }
-        else{
-          throw new Error(`Unable to find target object ${target}`);
-        }
-      }
-    })
+      })
 
     this.emitMovement({
       rotation: 'front',
@@ -436,8 +437,10 @@ export default function WorldMap(): JSX.Element {
     const config = {
       type: Phaser.AUTO,
       parent: 'map-container',
-      minWidth: 800,
-      minHeight: 600,
+      height: Constants.PHASER_HEIGHT,
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+      },
       physics: {
         default: 'arcade',
         arcade: {
@@ -458,6 +461,35 @@ export default function WorldMap(): JSX.Element {
         newGameScene.resume();
       }
     }
+
+    // Toggling keyboard based off of input focus class
+    window.addEventListener('focusin', (e) => {
+      if (e.target &&
+        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+      ) {
+        game.input.keyboard.enabled = false;
+      }
+    });
+
+    window.addEventListener('focusout', (e) => {
+      if (
+        !game.input.keyboard.enabled &&
+        e.target &&
+        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+      ) {
+        game.input.keyboard.enabled = true;
+      }
+    });
+
+    // Set the width of the phaser canvas on load and re-size
+    window.addEventListener('load', () => {
+      game.canvas.setAttribute('width', `${window.innerWidth * Constants.PHASER_PROPORTION_OF_SCREEN}`);
+    });
+
+    window.addEventListener('resize', () => {
+      game.canvas.setAttribute('width', `${window.innerWidth * Constants.PHASER_PROPORTION_OF_SCREEN}`);
+    });
+
     return () => {
       game.destroy(true);
     };
@@ -468,5 +500,5 @@ export default function WorldMap(): JSX.Element {
     gameScene?.updatePlayersLocations(players);
   }, [players, deepPlayers, gameScene]);
 
-  return <div id="map-container"/>;
+  return <div id="map-container" />;
 }

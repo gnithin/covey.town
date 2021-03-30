@@ -42,7 +42,7 @@ describe('Rendering the conversations list view', () => {
             <ChatInputBox />,
         );
         renderedElement.getByTestId("chat-input-box-wrapper");
-        renderedElement.getByRole('button', { name: /send/ });
+        renderedElement.getByRole('button', { name: /send-chat/ });
     })
 
     it('Test if send a message triggers a socket call', () => {
@@ -54,7 +54,7 @@ describe('Rendering the conversations list view', () => {
         const inputString = 'Hello!';
         fireEvent.change(chatInput, { target: { value: inputString } })
 
-        const sendBtn = getByRole('button', { name: /send/ });
+        const sendBtn = getByRole('button', { name: /send-chat/ });
         sendBtn.click();
 
         // Check if the message was sent

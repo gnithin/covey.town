@@ -1,29 +1,51 @@
-import React from 'react';
-import { Box } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Socket } from 'socket.io-client';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
-import useCoveyAppState from '../../hooks/useCoveyAppState';
 import { ServerChatEntry, ChatEntry } from '../../classes/SpatialChat';
 import { addNewChatEntryAction } from '../../redux/actions'
+import constants from '../../constants';
 
-export const SpatialChatContainer: React.FunctionComponent = () => {
+interface ISpatialChatContainerProps {
+    socket: Socket | null
+}
+
+export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainerProps> = ({ socket }: ISpatialChatContainerProps) => {
     const dispatch = useDispatch();
+    useEffect(() => {
+        const receiveChatMessageListener = (receiveChatMessage: ServerChatEntry) => {
+            dispatch(
+                addNewChatEntryAction(ChatEntry.fromServerChat(receiveChatMessage))
+            );
+        };
 
-    const { socket } = useCoveyAppState();
-    socket?.on('receiveChatMessage', (receiveChatMessage: ServerChatEntry) => {
-        dispatch(
-            addNewChatEntryAction(ChatEntry.fromServerChat(receiveChatMessage))
-        );
-    });
+        socket?.on('receiveChatMessage', receiveChatMessageListener);
+        return () => {
+            // Unsubscribe to the current listener
+            socket?.off('receiveChatMessage', receiveChatMessageListener);
+        }
+    }, [socket, dispatch])
 
     return (
-        <div>
-            Spatial chat container
-            <ConversationsList />
-            <Box pos="absolute" bottom="0" width="30%" height="75px">
+        <div style={{
+            backgroundColor: '#F0FFF4',
+            height: constants.PHASER_HEIGHT,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            padding: "5px 5px",
+        }}>
+            <div style={{
+                height: "90%",
+            }}>
+                <ConversationsList />
+            </div>
+            <div style={{
+                justifySelf: 'flex-end',
+            }}>
                 <ChatInputBox />
-            </Box>
+            </div>
         </div>
     )
 };

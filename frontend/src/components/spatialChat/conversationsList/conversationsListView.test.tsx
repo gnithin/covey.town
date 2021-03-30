@@ -24,6 +24,12 @@ const render = (
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
+const mockUseCoveyAppState = jest.fn(() => (Promise.resolve()));
+jest.mock('../../../hooks/useCoveyAppState', () => ({
+    __esModule: true, // this property makes it work
+    default: () => (mockUseCoveyAppState)
+}));
+
 // Helper method to create initial state with chat-entries
 const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
     return {

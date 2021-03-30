@@ -7,6 +7,9 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     <div className="chat-box-container">
         <InputGroup size="md">
             <Input
+                style={{
+                    backgroundColor: "#FFF", // It's soo odd that it defaults to transparent :D
+                }}
                 placeholder="Say Something..."
                 size="lg"
                 value={value}
@@ -19,8 +22,8 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     }
                 }}
             />
-            <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={onInputSubmit} colorScheme="teal">
+            <InputRightElement>
+                <Button size="sm" onClick={onInputSubmit} colorScheme="teal">
                     send
                 </Button>
             </InputRightElement>

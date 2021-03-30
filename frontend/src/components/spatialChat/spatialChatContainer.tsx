@@ -29,10 +29,23 @@ export const SpatialChatContainer: React.FunctionComponent = () => {
 
     return (
         <div style={{
-            height: constants.PHASER_HEIGHT
+            backgroundColor: '#F0FFF4',
+            height: constants.PHASER_HEIGHT,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            padding: "5px 5px",
         }}>
-            <ConversationsList />
-            <ChatInputBox />
+            <div style={{
+                height: "90%",
+            }}>
+                <ConversationsList />
+            </div>
+            <div style={{
+                justifySelf: 'flex-end',
+            }}>
+                <ChatInputBox />
+            </div>
         </div>
     )
 };

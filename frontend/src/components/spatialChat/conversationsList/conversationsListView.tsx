@@ -7,7 +7,7 @@ import { RootState } from '../../../redux/store'
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
     return (
-        <Box backgroundColor='#F0FFF4' w="100%" height={690} data-testid="conversations-wrapper">
+        <Box data-testid="conversations-wrapper">
             <Stack spacing={4}>
                 {
                     chatList.map((chatEntry) => (

@@ -21,7 +21,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
             style={{
                 height: "100%",
                 overflow: "scroll",
-                marginBottom: "10px",
+                paddingBottom: "10px",
             }}
             ref={parentRef}
         >

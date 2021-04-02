@@ -1,37 +1,32 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { updateCurrentMessageAction } from '../../../redux/actions';
 import ChatInputBoxView from './chatInputBoxView';
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
 import Constants from '../../../constants';
 
 const ChatInputBoxContainer: React.FunctionComponent = () => {
-    const chat = useSelector((state: RootState) => state.chat.current_message);
-    const dispatch = useDispatch();
-
     const { socket } = useCoveyAppState();
-    const sendChatMessage = () => {
+    const sendChatMessage = (chatMessage: string) => {
         socket?.emit('sendChatMessage', {
-            message: chat,
+            message: chatMessage,
+            // TODO: Remove this hard-coded entry
             broadcastRadius: Constants.DEFAULT_BROADCAST_RADIUS,
         });
-
-        // Set the input to empty after submitting
-        dispatch(updateCurrentMessageAction(""));
     }
 
     return (
         <div data-testid="chat-input-box-wrapper">
-            <ChatInputBoxView
-                value={chat}
-                onInputChanged={(inputValue) => {
-                    dispatch(updateCurrentMessageAction(inputValue));
-                }}
-                onInputSubmit={async () => {
-                    sendChatMessage();
-                }}
-            />
+            <div className="chat-box-container" style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+            }}>
+
+                <ChatInputBoxView
+                    onInputSubmit={async (chatMessage) => {
+                        sendChatMessage(chatMessage);
+                    }}
+                />
+            </div>
         </div>
     )
 };

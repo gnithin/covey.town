@@ -9,6 +9,11 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     { onInputSubmit }: IChatInputBoxView) => {
     const [chatMessage, setChatMessage] = useState("");
 
+    const submitHandler = async () => {
+        await onInputSubmit(chatMessage);
+        setChatMessage("");
+    }
+
     return (
         <>
             <Input
@@ -23,14 +28,14 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                 }}
                 onKeyPress={async (e) => {
                     if (e.key === "Enter") {
-                        await onInputSubmit(chatMessage);
+                        await submitHandler();
                     }
                 }}
                 className={Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT}
             />
 
             <Button
-                onClick={() => onInputSubmit(chatMessage)}
+                onClick={async () => { await submitHandler() }}
                 size="lg"
                 style={{
                     padding: 0,

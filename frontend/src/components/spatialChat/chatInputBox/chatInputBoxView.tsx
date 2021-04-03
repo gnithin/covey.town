@@ -4,6 +4,7 @@ import { ChatIcon } from '@chakra-ui/icons';
 import ReactQuill from 'react-quill';
 import IChatInputBoxView from './IChatInputBoxView';
 import 'react-quill/dist/quill.snow.css';
+import './customEditor.css';
 import Constants from '../../../constants';
 import { ChatEditorType } from '../../../classes/SpatialChat';
 
@@ -50,6 +51,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
             {(chatEditorType === ChatEditorType.RICH_TEXT_EDITOR) &&
                 <ReactQuill
                     theme="snow"
+                    className="custom-quill-changes"
                     ref={richTextEditorRef}
                     value={chatMessage}
                     onChange={setChatMessage}

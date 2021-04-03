@@ -2,15 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons';
 import ReactQuill from 'react-quill';
+import { useSelector } from 'react-redux';
 import IChatInputBoxView from './IChatInputBoxView';
 import 'react-quill/dist/quill.snow.css';
 import './customEditor.css';
 import Constants from '../../../constants';
 import { ChatEditorType } from '../../../classes/SpatialChat';
+import { RootState } from '../../../redux/store';
 
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
-    { onInputSubmit, chatEditorType }: IChatInputBoxView) => {
+    { onInputSubmit }: IChatInputBoxView) => {
+    const chatEditorType = useSelector((state: RootState) => state.chat.settingChatEditorType);
     const [chatMessage, setChatMessage] = useState("");
     const prevEditorRef = useRef<ChatEditorType | null>(null);
     const richTextEditorRef = useRef<ReactQuill>(null);

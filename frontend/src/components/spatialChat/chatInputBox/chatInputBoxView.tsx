@@ -55,6 +55,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     ref={richTextEditorRef}
                     value={chatMessage}
                     onChange={setChatMessage}
+                    placeholder="Say Something..."
                     style={{
                         backgroundColor: "#FFF",
                         flexGrow: 2,

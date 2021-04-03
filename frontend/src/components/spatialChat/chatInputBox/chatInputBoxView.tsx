@@ -3,13 +3,13 @@ import { Button, Input } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons';
 import ReactQuill from 'react-quill';
 import { useSelector } from 'react-redux';
+import DOMPurify from 'dompurify';
 import IChatInputBoxView from './IChatInputBoxView';
 import 'react-quill/dist/quill.snow.css';
 import './customEditor.css';
 import Constants from '../../../constants';
 import { ChatEditorType } from '../../../classes/SpatialChat';
 import { RootState } from '../../../redux/store';
-
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     { onInputSubmit }: IChatInputBoxView) => {
@@ -23,7 +23,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                 case ChatEditorType.DEFAULT_EDITOR:
                     if (prevEditorRef.current === ChatEditorType.RICH_TEXT_EDITOR) {
                         setChatMessage(
-                            chatMessage.trim().replace(Constants.HTML_TAGS_REPLACE_REGEX, "").trim()
+                            DOMPurify.sanitize(chatMessage, { ALLOWED_TAGS: [] }).trim()
                         );
                     }
                     break;
@@ -46,7 +46,8 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
         }
 
         // Check for tags
-        if (message.replace(Constants.HTML_TAGS_REPLACE_REGEX, "").trim() === "") {
+        const cleanMessage = DOMPurify.sanitize(message, { ALLOWED_TAGS: [] })
+        if (cleanMessage.trim() === "") {
             return false;
         }
 

@@ -15,7 +15,9 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
     }
 
     return (
-        <div data-testid="chat-input-box-wrapper">
+        <div data-testid="chat-input-box-wrapper" style={{
+            flex: "none",
+        }}>
             <div className="chat-box-container" style={{
                 display: "flex",
                 flexDirection: "row",

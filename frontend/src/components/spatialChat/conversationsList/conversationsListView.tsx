@@ -25,12 +25,13 @@ export const ConversationsListView: React.FunctionComponent = () => {
     }, [parentRef, chatList]);
 
     return (
-        <Box
+        <div
             data-testid="conversations-wrapper"
             style={{
-                height: "100%",
+                flex: "auto",
                 overflow: "scroll",
-                padding: "10px 10px",
+                padding: "10px 5px",
+                paddingTop: "50px",
             }}
             ref={parentRef}
         >
@@ -65,7 +66,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                     ))
                 }
             </Stack>
-        </Box>
+        </div>
     );
 };
 

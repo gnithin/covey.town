@@ -33,19 +33,10 @@ export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainer
             height: constants.PHASER_HEIGHT,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly",
             padding: "5px 5px",
         }}>
-            <div style={{
-                height: "90%",
-            }}>
-                <ConversationsList />
-            </div>
-            <div style={{
-                justifySelf: 'flex-end',
-            }}>
-                <ChatInputBox />
-            </div>
+            <ConversationsList />
+            <ChatInputBox />
         </div>
     )
 };

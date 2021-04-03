@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@chakra-ui/react'
+import { Button, Input } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons';
 import ReactQuill from 'react-quill';
 import IChatInputBoxView from './IChatInputBoxView';
 import 'react-quill/dist/quill.snow.css';
+import Constants from '../../../constants';
 import { ChatEditorType } from '../../../classes/SpatialChat';
 
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     { onInputSubmit, chatEditorType }: IChatInputBoxView) => {
-    const [chatMessage, setChatMessage] = useState("sample");
+    const [chatMessage, setChatMessage] = useState("");
     const prevEditorRef = useRef<ChatEditorType | null>(null);
     const richTextEditorRef = useRef<ReactQuill>(null);
 
@@ -46,30 +47,34 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
 
     return (
         <>
-            <ReactQuill
-                theme="snow"
-                ref={richTextEditorRef}
-                value={chatMessage}
-                onChange={setChatMessage}
-            />
+            {(chatEditorType === ChatEditorType.RICH_TEXT_EDITOR) &&
+                <ReactQuill
+                    theme="snow"
+                    ref={richTextEditorRef}
+                    value={chatMessage}
+                    onChange={setChatMessage}
+                />
+            }
 
-            {/* <Input
-                style={{
-                    backgroundColor: "#FFF", // It's soo odd that it defaults to transparent :D
-                }}
-                placeholder="Say Something..."
-                size="lg"
-                value={chatMessage}
-                onChange={(e) => {
-                    setChatMessage(e.target.value);
-                }}
-                onKeyPress={async (e) => {
-                    if (e.key === "Enter") {
-                        await submitHandler();
-                    }
-                }}
-                className={Constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
-            /> */}
+            { (chatEditorType === ChatEditorType.DEFAULT_EDITOR) &&
+                <Input
+                    style={{
+                        backgroundColor: "#FFF", // It's soo odd that it defaults to transparent :D
+                    }}
+                    placeholder="Say Something..."
+                    size="lg"
+                    value={chatMessage}
+                    onChange={(e) => {
+                        setChatMessage(e.target.value);
+                    }}
+                    onKeyPress={async (e) => {
+                        if (e.key === "Enter") {
+                            await submitHandler();
+                        }
+                    }}
+                    className={Constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
+                />
+            }
 
             <Button
                 onClick={async () => { await submitHandler() }}

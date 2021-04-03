@@ -2,10 +2,12 @@ import { AnyAction } from 'redux';
 import { ChatReducerState } from "../reduxInterfaces";
 import { actionTypes } from '../actions'
 import { ChatEditorType } from '../../classes/SpatialChat';
+import constants from '../../constants';
 
 const initialState: ChatReducerState = {
     chats: [],
     settingChatEditorType: ChatEditorType.DEFAULT_EDITOR,
+    settingChatBroadcastRadius: constants.DEFAULT_BROADCAST_RADIUS,
 };
 
 const chatReducer = (state: ChatReducerState = initialState, action: AnyAction): ChatReducerState => {

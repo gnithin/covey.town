@@ -1,15 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import ChatInputBoxView from './chatInputBoxView';
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
-import Constants from '../../../constants';
+import { RootState } from '../../../redux/store';
 
 const ChatInputBoxContainer: React.FunctionComponent = () => {
     const { socket } = useCoveyAppState();
-    const sendChatMessage = (chatMessage: string) => {
+    const broadcastRadius = useSelector((state: RootState) => state.chat.settingChatBroadcastRadius);
+
+    const sendChatMessage = (chatMessage: string, radius: number) => {
         socket?.emit('sendChatMessage', {
             message: chatMessage,
-            // TODO: Remove this hard-coded entry
-            broadcastRadius: Constants.DEFAULT_BROADCAST_RADIUS,
+            broadcastRadius: radius,
         });
     }
 
@@ -26,7 +28,7 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
 
                 <ChatInputBoxView
                     onInputSubmit={async (chatMessage) => {
-                        sendChatMessage(chatMessage);
+                        sendChatMessage(chatMessage, broadcastRadius);
                     }}
                 />
             </div>

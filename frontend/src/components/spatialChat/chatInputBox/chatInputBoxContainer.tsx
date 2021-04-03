@@ -26,7 +26,7 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
                     onInputSubmit={async (chatMessage) => {
                         sendChatMessage(chatMessage);
                     }}
-                    chatEditorType={ChatEditorType.DEFAULT_EDITOR}
+                    chatEditorType={ChatEditorType.RICH_TEXT_EDITOR}
                 />
             </div>
         </div>

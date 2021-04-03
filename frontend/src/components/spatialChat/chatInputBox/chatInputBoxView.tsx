@@ -16,25 +16,21 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
     const chatEditorType = useSelector((state: RootState) => state.chat.settingChatEditorType);
     const [chatMessage, setChatMessage] = useState("");
     const prevEditorRef = useRef<ChatEditorType | null>(null);
-    const richTextEditorRef = useRef<ReactQuill>(null);
 
     useEffect(() => {
         if (prevEditorRef.current !== null) {
             switch (chatEditorType) {
                 case ChatEditorType.DEFAULT_EDITOR:
-                    if (
-                        prevEditorRef.current === ChatEditorType.RICH_TEXT_EDITOR
-                        && richTextEditorRef.current !== null
-                    ) {
-                        // Perform conversion from rich-text to default editor
-                        const editor = richTextEditorRef.current.getEditor();
-                        setChatMessage(editor.getText());
+                    if (prevEditorRef.current === ChatEditorType.RICH_TEXT_EDITOR) {
+                        setChatMessage(
+                            chatMessage.trim().replace(Constants.HTML_TAGS_REPLACE_REGEX, "").trim()
+                        );
                     }
                     break;
 
                 case ChatEditorType.RICH_TEXT_EDITOR:
                     if (prevEditorRef.current === ChatEditorType.DEFAULT_EDITOR) {
-                        // No conversions required
+                        // No conversions required for now
                     }
                     break;
 
@@ -42,7 +38,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
             }
         }
         prevEditorRef.current = chatEditorType
-    }, [chatEditorType]);
+    }, [chatEditorType, chatMessage, setChatMessage]);
 
     const canSubmitMessage = (message: string): boolean => {
         if (message.trim() === "") {
@@ -50,7 +46,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
         }
 
         // Check for tags
-        if (message.replace(/(<([^>]+)>)/gi, "").trim() === "") {
+        if (message.replace(Constants.HTML_TAGS_REPLACE_REGEX, "").trim() === "") {
             return false;
         }
 
@@ -73,7 +69,6 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                 <ReactQuill
                     theme="snow"
                     className="custom-quill-changes"
-                    ref={richTextEditorRef}
                     value={chatMessage}
                     onChange={setChatMessage}
                     placeholder="Say Something..."

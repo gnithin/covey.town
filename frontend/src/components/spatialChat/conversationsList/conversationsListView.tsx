@@ -1,18 +1,6 @@
 import {
-    Tag, Text, Stack, Box,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    Button,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuIcon,
-    MenuCommand,
-    MenuDivider,
+    Text, Stack, Box,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,13 +12,15 @@ import ConversationView from './conversationView';
 
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
-    const parentRef = useRef(null);
+    const parentRef = useRef<HTMLDivElement>(null);
     const { userName } = useCoveyAppState();
 
     useEffect(() => {
         if (parentRef) {
-            const currentNode = (parentRef.current as any);
-            currentNode.scrollTop = currentNode.scrollHeight;
+            const currentNode = parentRef.current;
+            if (currentNode !== null) {
+                currentNode.scrollTop = currentNode.scrollHeight;
+            }
         }
     }, [parentRef, chatList]);
 

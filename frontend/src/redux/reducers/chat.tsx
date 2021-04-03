@@ -27,6 +27,12 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
                 settingChatEditorType: action.editorType,
             }
 
+        case actionTypes.ACTION_CHANGE_BROADCAST_RADIUS:
+            return {
+                ...state,
+                settingChatBroadcastRadius: action.broadcastRadius
+            }
+
         default:
             return state;
     }

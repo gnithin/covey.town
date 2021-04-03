@@ -13,3 +13,8 @@ export const changeEditorTypeAction = (editorType: ChatEditorType): AnyAction =>
     type: actionTypes.ACTION_CHANGE_EDITOR_TYPE,
     editorType,
 })
+
+export const changeBroadcastRadius = (broadcastRadius: number): AnyAction => ({
+    type: actionTypes.ACTION_CHANGE_BROADCAST_RADIUS,
+    broadcastRadius,
+})

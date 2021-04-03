@@ -48,7 +48,6 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                     backgroundColor: 'rgb(189, 255, 207)',
                     color: "#000",
                     textAlign: 'left',
-                    padding: "10px",
                 }}
                 onMouseOver={() => {
                     setDisplayMenu(true);
@@ -60,6 +59,9 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                 {/* eslint-disable-next-line react/no-danger */}
                 <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }}
                     className="ql-editor"
+                    style={{
+                        padding: "10px"
+                    }}
                 />
 
                 <div

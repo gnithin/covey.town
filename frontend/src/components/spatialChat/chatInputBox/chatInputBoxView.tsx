@@ -62,11 +62,13 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     modules={{
                         toolbar: [
                             ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
                             [{ 'font': [] }],
+                            ['clean'],
                         ],
                     }}
                     formats={[
-                        'font', 'bold', 'italic', 'underline', 'strike', 'blockquote',
+                        'font', 'bold', 'italic', 'underline', 'strike', 'color', 'background'
                     ]}
                 />
             }

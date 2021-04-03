@@ -62,7 +62,7 @@ export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainer
                         Spatial Chat
                     </Heading>
                     <Tooltip
-                        label="You can hold a conversation with anyone who is near you! Send messages automatically to those around you. Click on the Chat-Settings link (at the bottom of the page) for configuration"
+                        label="Hold a conversation with anyone near you! Spatial chat sends messages automatically to those around you, skipping the rest of the folks in the town. Click on the Chat-Settings link (at the bottom of the page) for configuration options"
                         aria-label="A tooltip"
                     >
                         <QuestionOutlineIcon />

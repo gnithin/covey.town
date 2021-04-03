@@ -462,11 +462,27 @@ export default function WorldMap(): JSX.Element {
       }
     }
 
+    const targetHasFocusClass = (target: any): boolean => {
+      if (!target) {
+        return false
+      }
+
+      let foundVal = false;
+
+      // I hate this linting rule
+      Constants.PRIORITY_FOCUS_CLASSES.forEach(className => {
+        if (target.classList.contains(className)) {
+          foundVal = true;
+        }
+      });
+
+      return foundVal;
+    }
+
     // Toggling keyboard based off of input focus class
     window.addEventListener('focusin', (e) => {
-      if (e.target &&
-        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
-      ) {
+      if (game.input.keyboard.enabled &&
+        targetHasFocusClass(e.target)) {
         game.input.keyboard.enabled = false;
       }
     });
@@ -474,8 +490,7 @@ export default function WorldMap(): JSX.Element {
     window.addEventListener('focusout', (e) => {
       if (
         !game.input.keyboard.enabled &&
-        e.target &&
-        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+        targetHasFocusClass(e.target)
       ) {
         game.input.keyboard.enabled = true;
       }

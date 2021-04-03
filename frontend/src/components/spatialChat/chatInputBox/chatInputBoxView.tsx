@@ -31,7 +31,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                         await submitHandler();
                     }
                 }}
-                className={Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT}
+                className={Constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
             />
 
             <Button

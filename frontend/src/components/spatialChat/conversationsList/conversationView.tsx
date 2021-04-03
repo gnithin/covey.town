@@ -58,10 +58,8 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                 }}
             >
                 {/* eslint-disable-next-line react/no-danger */}
-                <span className="ql-editor" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }}
-                    style={{
-                        all: 'initial',
-                    }}
+                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }}
+                    className="ql-editor"
                 />
 
                 <div

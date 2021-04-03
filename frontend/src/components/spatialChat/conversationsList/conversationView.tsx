@@ -12,9 +12,6 @@ import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 import { ChatEntry } from '../../../classes/SpatialChat';
 
-
-
-
 interface IConversationView {
     chatEntry: ChatEntry;
     loggedInUsername: string;
@@ -61,7 +58,11 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                 }}
             >
                 {/* eslint-disable-next-line react/no-danger */}
-                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }} />
+                <span className="ql-editor" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }}
+                    style={{
+                        all: 'initial',
+                    }}
+                />
 
                 <div
                     className="menu"

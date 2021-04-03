@@ -35,6 +35,7 @@ export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainer
             flexDirection: "column",
             padding: "5px 5px",
         }}>
+            {/* NOTE: Before changing the layout or the styling, make sure to test out the CSS. It is pretty delicately placed */}
             <ConversationsList />
             <ChatInputBox />
         </div>

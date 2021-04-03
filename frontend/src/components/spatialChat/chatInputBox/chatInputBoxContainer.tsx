@@ -14,6 +14,7 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
         });
     }
 
+    /* NOTE: Before changing the layout or the styling, make sure to test out the CSS. It is pretty delicately placed */
     return (
         <div data-testid="chat-input-box-wrapper" style={{
             flex: "none",

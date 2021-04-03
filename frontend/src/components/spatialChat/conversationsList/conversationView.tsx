@@ -9,7 +9,10 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { ChatEntry } from '../../../classes/SpatialChat';
+
+
 
 
 interface IConversationView {
@@ -58,7 +61,7 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                 }}
             >
                 {/* eslint-disable-next-line react/no-danger */}
-                <span dangerouslySetInnerHTML={{ __html: chatEntry.message }} />
+                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }} />
 
                 <div
                     className="menu"

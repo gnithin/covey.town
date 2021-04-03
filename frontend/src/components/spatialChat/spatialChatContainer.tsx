@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Socket } from 'socket.io-client';
+import {
+    Heading, Box, Tooltip,
+} from '@chakra-ui/react';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import ConversationsList from './conversationsList';
 import ChatInputBox from './chatInputBox';
 import { ServerChatEntry, ChatEntry } from '../../classes/SpatialChat';
@@ -34,7 +38,37 @@ export const SpatialChatContainer: React.FunctionComponent<ISpatialChatContainer
             display: "flex",
             flexDirection: "column",
             padding: "5px 5px",
+            position: "relative",
         }}>
+            <Box style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "50px",
+                backgroundColor: "#BDFFCF",
+                borderBottom: "1px solid #F0FFF4",
+            }}>
+                <div style={{
+                    display: "flex",
+                    height: "100%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingLeft: "15px",
+                    paddingRight: "15px",
+                }}>
+                    <Heading as="h3" size="md" isTruncated>
+                        Spatial Chat
+                    </Heading>
+                    <Tooltip
+                        label="You can hold a conversation with anyone who is near you! Send messages automatically to those around you. Click on the Chat-Settings link (at the bottom of the page) for configuration"
+                        aria-label="A tooltip"
+                    >
+                        <QuestionOutlineIcon />
+                    </Tooltip>
+                </div>
+            </Box>
             {/* NOTE: Before changing the layout or the styling, make sure to test out the CSS. It is pretty delicately placed */}
             <ConversationsList />
             <ChatInputBox />

@@ -41,8 +41,26 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
         prevEditorRef.current = chatEditorType
     }, [chatEditorType]);
 
+    const canSubmitMessage = (message: string): boolean => {
+        if (message.trim() === "") {
+            return false;
+        }
+
+        // Check for tags
+        if (message.replace(/(<([^>]+)>)/gi, "").trim() === "") {
+            return false;
+        }
+
+        return true;
+    }
+
     const submitHandler = async () => {
-        await onInputSubmit(chatMessage);
+        const messageToSend = chatMessage.trim();
+        if (!canSubmitMessage(messageToSend)) {
+            return;
+        }
+
+        await onInputSubmit(messageToSend);
         setChatMessage("");
     }
 

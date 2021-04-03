@@ -19,6 +19,12 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
                 ]
             };
 
+        case actionTypes.ACTION_CHANGE_EDITOR_TYPE:
+            return {
+                ...state,
+                settingChatEditorType: action.editorType,
+            }
+
         default:
             return state;
     }

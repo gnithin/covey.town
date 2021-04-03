@@ -57,7 +57,9 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                     setDisplayMenu(false);
                 }}
             >
-                {chatEntry.message}
+                {/* eslint-disable-next-line react/no-danger */}
+                <span dangerouslySetInnerHTML={{ __html: chatEntry.message }} />
+
                 <div
                     className="menu"
                     style={{

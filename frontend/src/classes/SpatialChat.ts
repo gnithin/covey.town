@@ -45,3 +45,8 @@ export class ChatEntry {
         );
     }
 }
+
+export enum ChatEditorType {
+    DEFAULT_EDITOR = 1,
+    RICH_TEXT_EDITOR
+}

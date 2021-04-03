@@ -186,23 +186,27 @@ class CoveyGameScene extends Phaser.Scene {
         .scale(speed);
 
       const isMoving = primaryDirection !== undefined;
+      const referencePrimaryDirection = (primaryDirection !== undefined) ? primaryDirection : "front";
+
       this.player.label.setX(body.x);
       this.player.label.setY(body.y - 20);
+
       if (!this.lastLocation
         || this.lastLocation.x !== body.x
-        || this.lastLocation.y !== body.y || this.lastLocation.rotation !== primaryDirection
+        || this.lastLocation.y !== body.y
+        || this.lastLocation.rotation !== referencePrimaryDirection
         || this.lastLocation.moving !== isMoving) {
         if (!this.lastLocation) {
           this.lastLocation = {
             x: body.x,
             y: body.y,
-            rotation: primaryDirection || 'front',
+            rotation: referencePrimaryDirection,
             moving: isMoving,
           };
         }
         this.lastLocation.x = body.x;
         this.lastLocation.y = body.y;
-        this.lastLocation.rotation = primaryDirection || 'front';
+        this.lastLocation.rotation = referencePrimaryDirection;
         this.lastLocation.moving = isMoving;
         this.emitMovement(this.lastLocation);
       }

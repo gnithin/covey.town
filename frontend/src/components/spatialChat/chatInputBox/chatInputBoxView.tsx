@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Input, Button } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons';
+import ReactQuill from 'react-quill';
 import IChatInputBoxView from './IChatInputBoxView';
 import Constants from '../../../constants';
+import 'react-quill/dist/quill.snow.css';
+import { ChatEditorType } from '../../../classes/SpatialChat';
 
 
 const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
-    { onInputSubmit }: IChatInputBoxView) => {
+    { onInputSubmit, chatEditorType }: IChatInputBoxView) => {
     const [chatMessage, setChatMessage] = useState("");
 
     const submitHandler = async () => {
@@ -16,7 +19,14 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
 
     return (
         <>
-            <Input
+            <ReactQuill
+                className={Constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
+                theme="snow"
+                value={chatMessage}
+                onChange={setChatMessage}
+            />
+
+            {/* <Input
                 style={{
                     backgroundColor: "#FFF", // It's soo odd that it defaults to transparent :D
                 }}
@@ -32,7 +42,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     }
                 }}
                 className={Constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
-            />
+            /> */}
 
             <Button
                 onClick={async () => { await submitHandler() }}

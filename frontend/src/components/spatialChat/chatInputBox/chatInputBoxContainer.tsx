@@ -2,6 +2,7 @@ import React from 'react';
 import ChatInputBoxView from './chatInputBoxView';
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
 import Constants from '../../../constants';
+import { ChatEditorType } from '../../../classes/SpatialChat';
 
 const ChatInputBoxContainer: React.FunctionComponent = () => {
     const { socket } = useCoveyAppState();
@@ -25,6 +26,7 @@ const ChatInputBoxContainer: React.FunctionComponent = () => {
                     onInputSubmit={async (chatMessage) => {
                         sendChatMessage(chatMessage);
                     }}
+                    chatEditorType={ChatEditorType.DEFAULT_EDITOR}
                 />
             </div>
         </div>

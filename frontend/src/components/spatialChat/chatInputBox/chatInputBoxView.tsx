@@ -53,6 +53,10 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                     ref={richTextEditorRef}
                     value={chatMessage}
                     onChange={setChatMessage}
+                    style={{
+                        backgroundColor: "#FFF",
+                        flexGrow: 2,
+                    }}
                 />
             }
 
@@ -82,6 +86,7 @@ const ChatInputBoxView: React.FunctionComponent<IChatInputBoxView> = (
                 style={{
                     padding: 0,
                     backgroundColor: '#BDFFCF',
+                    alignSelf: 'flex-end',
                 }}
                 aria-label='send-chat'
             >

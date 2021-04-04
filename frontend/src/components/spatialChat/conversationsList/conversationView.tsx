@@ -53,9 +53,10 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
 
         return (
             <MenuItem>
-                Block User
+                Block User &nbsp;&nbsp;
                 <Switch
                     size="md"
+                    colorScheme="red"
                     isChecked={blockedPlayerIds.includes(chatEntry.sender.id)}
                     onChange={onToggleBlock}
                 />

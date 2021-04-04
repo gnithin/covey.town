@@ -33,10 +33,10 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
     const onToggleBlock = () => {
         if (blockedPlayerIds.includes(chatEntry.sender.id)) {
             dispatch(unblockPlayerAction(chatEntry.sender.id));
-            socket?.emit('unblockPlayerInChat', {playerID: chatEntry.sender.id});
+            socket?.emit('unblockPlayerInChat', chatEntry.sender.id);
         } else {
             dispatch(blockPlayerAction(chatEntry.sender.id));
-            socket?.emit('blockPlayerInChat', {playerID: chatEntry.sender.id});
+            socket?.emit('blockPlayerInChat', chatEntry.sender.id);
         }
     }
 

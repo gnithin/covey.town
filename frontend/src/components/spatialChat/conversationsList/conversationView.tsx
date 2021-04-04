@@ -14,16 +14,16 @@ import { ChatEntry } from '../../../classes/SpatialChat';
 
 interface IConversationView {
     chatEntry: ChatEntry;
-    loggedInUsername: string;
+    loggedInPlayerID: string;
 }
 
 const ConversationView: React.FunctionComponent<IConversationView> = (
-    { chatEntry, loggedInUsername }: IConversationView
+    { chatEntry, loggedInPlayerID }: IConversationView
 ) => {
     const [displayMenu, setDisplayMenu] = useState(false);
 
     const renderMenuItems = () => {
-        if (chatEntry.sender.userName === loggedInUsername) {
+        if (chatEntry.sender.id === loggedInPlayerID) {
             return (
                 <MenuGroup title="Sent To">
                     {chatEntry.receivingPlayers?.map((sentTo) => (

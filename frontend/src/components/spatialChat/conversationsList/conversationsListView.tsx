@@ -13,7 +13,7 @@ import ConversationView from './conversationView';
 export const ConversationsListView: React.FunctionComponent = () => {
     const chatList: ChatEntry[] = useSelector((state: RootState) => state.chat.chats);
     const parentRef = useRef<HTMLDivElement>(null);
-    const { userName } = useCoveyAppState();
+    const { myPlayerID } = useCoveyAppState();
 
     useEffect(() => {
         if (parentRef) {
@@ -40,7 +40,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                 {
                     chatList.map((chatEntry) => (
                         <Box key={chatEntry.generateKey()} style={{
-                            textAlign: (chatEntry.sender.userName === userName) ? "right" : "left",
+                            textAlign: (chatEntry.sender.id === myPlayerID) ? "right" : "left",
                         }}>
                             <Text>
                                 <span style={{
@@ -48,7 +48,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                                     fontWeight: "bold"
                                 }}>
                                     {
-                                        (chatEntry.sender.userName === userName) ?
+                                        (chatEntry.sender.id === myPlayerID) ?
                                             "Me" : chatEntry.sender.userName
                                     }
                                 </span>
@@ -61,7 +61,7 @@ export const ConversationsListView: React.FunctionComponent = () => {
                             </Text>
                             <ConversationView
                                 chatEntry={chatEntry}
-                                loggedInUsername={userName}
+                                loggedInPlayerID={myPlayerID}
                             />
                         </Box >
                     ))

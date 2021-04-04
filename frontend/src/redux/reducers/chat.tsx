@@ -8,6 +8,7 @@ const initialState: ChatReducerState = {
     chats: [],
     settingChatEditorType: ChatEditorType.DEFAULT_EDITOR,
     settingChatBroadcastRadius: constants.DEFAULT_BROADCAST_RADIUS,
+    blockedPlayerIds: [],
 };
 
 const chatReducer = (state: ChatReducerState = initialState, action: AnyAction): ChatReducerState => {
@@ -18,7 +19,7 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
                 chats: [
                     ...state.chats,
                     action.chatEntry,
-                ]
+                ],
             };
 
         case actionTypes.ACTION_CHANGE_EDITOR_TYPE:
@@ -31,6 +32,21 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
             return {
                 ...state,
                 settingChatBroadcastRadius: action.broadcastRadius
+            }
+
+        case actionTypes.BLOCK_PLAYER:
+            return {
+                ...state,
+                blockedPlayerIds: [
+                    ...state.blockedPlayerIds,
+                    action.playerId,
+                ],
+            };
+
+        case actionTypes.UNBLOCK_PLAYER:
+            return {
+                ...state,
+                blockedPlayerIds: state.blockedPlayerIds.filter(id => id !== action.playerId),
             }
 
         default:

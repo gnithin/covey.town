@@ -1,12 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import {MenuItem, FormControl, Select, Typography} from '@material-ui/core';
 import {
     Button,
-    Checkbox,
-    FormControl,
-    FormLabel,
+    FormLabel,    
     Input,
     Modal,
     ModalBody,
@@ -23,6 +20,10 @@ import { ChatEditorType } from '../../../classes/SpatialChat';
 
 export default function ChatSettings() {
   const {isOpen, onOpen, onClose} = useDisclosure()
+  const chateditorOptions = [
+      {type: ChatEditorType.DEFAULT_EDITOR, text: 'Default Editor'},
+      {type: ChatEditorType.RICH_TEXT_EDITOR, text: 'Rich Text Editor'}
+    ]
   const dispatch = useDispatch();
   const changeChatEditor = (editorType: ChatEditorType) => {
     dispatch(
@@ -42,6 +43,9 @@ export default function ChatSettings() {
     changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
     closeSettings();
   };
+  const doNothing = () => {          
+    changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
+  };
 
 
   return (
@@ -56,11 +60,22 @@ export default function ChatSettings() {
         <ModalCloseButton/>
         <form onSubmit={(ev)=>{ev.preventDefault(); updateSettings(); }}>
           <ModalBody pb={6}>
-            <FormControl mt={4}>
-              <FormLabel htmlFor='isRichTextEditor'>Rich Text Editor</FormLabel>
-              <Checkbox id="isRichTextEditor" name="isRichTextEditor"/>
+          <FormControl fullWidth>
+          <Typography variant="subtitle2" gutterBottom>
+            Chat Editor Type
+          </Typography>
+            <Select       
+            
+            onChange={(e) => doNothing() } variant ="outlined"
+          >
+            {chateditorOptions.map((editor) => (
+              <MenuItem  key={editor.type.toString()}>
+                {editor.text}
+              </MenuItem>
+            ))}
+          </Select>
             </FormControl>
-            <FormControl isRequired>
+            <FormControl>
               <FormLabel htmlFor="chatRadius">Chat Radius</FormLabel>
               <Input data-testid="chatRadius" id="chatRadius" placeholder="80" name="chatRadius" type="text"  />
             </FormControl>

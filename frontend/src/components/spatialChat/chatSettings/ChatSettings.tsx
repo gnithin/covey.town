@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -17,9 +18,17 @@ import {
     useDisclosure,
     useToast
   } from '@chakra-ui/react';
+import { changeEditorTypeAction } from '../../../redux/actions/chatReducerActions'
+import { ChatEditorType } from '../../../classes/SpatialChat';
 
 export default function ChatSettings() {
   const {isOpen, onOpen, onClose} = useDisclosure()
+  const dispatch = useDispatch();
+  const changeChatEditor = (editorType: ChatEditorType) => {
+    dispatch(
+        changeEditorTypeAction (editorType)
+    );
+  };
   
   const openSettings = useCallback(()=>{
     onOpen();    
@@ -28,6 +37,11 @@ export default function ChatSettings() {
   const closeSettings = useCallback(()=>{
     onClose();    
   }, [onClose]);
+
+  const updateSettings = () => {      
+    changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
+    closeSettings();
+  };
 
 
   return (
@@ -40,7 +54,7 @@ export default function ChatSettings() {
       <ModalContent>
         <ModalHeader>Edit Chat Settings</ModalHeader>
         <ModalCloseButton/>
-        <form onSubmit={(ev)=>{ev.preventDefault(); }}>
+        <form onSubmit={(ev)=>{ev.preventDefault(); updateSettings(); }}>
           <ModalBody pb={6}>
             <FormControl mt={4}>
               <FormLabel htmlFor='isRichTextEditor'>Rich Text Editor</FormLabel>
@@ -53,7 +67,7 @@ export default function ChatSettings() {
           </ModalBody>
 
           <ModalFooter>
-            <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' >
+            <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' onClick={()=>updateSettings()} >
               Update
             </Button>
             <Button onClick={closeSettings}>Cancel</Button>

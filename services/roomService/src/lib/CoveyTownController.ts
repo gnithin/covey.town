@@ -195,7 +195,11 @@ export default class CoveyTownController {
 
   private onUnblockPlayer(session: PlayerSession, playerID: string): void {
     const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
-    this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
+    if (blockedPlayerSessionIndex !== -1) {
+      this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
+    } else {
+      throw new Error('cannot find player to unblock');
+    }
   }
 
 

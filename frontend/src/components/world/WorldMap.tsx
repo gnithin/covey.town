@@ -186,23 +186,27 @@ class CoveyGameScene extends Phaser.Scene {
         .scale(speed);
 
       const isMoving = primaryDirection !== undefined;
+      const referencePrimaryDirection = (primaryDirection !== undefined) ? primaryDirection : "front";
+
       this.player.label.setX(body.x);
       this.player.label.setY(body.y - 20);
+
       if (!this.lastLocation
         || this.lastLocation.x !== body.x
-        || this.lastLocation.y !== body.y || this.lastLocation.rotation !== primaryDirection
+        || this.lastLocation.y !== body.y
+        || this.lastLocation.rotation !== referencePrimaryDirection
         || this.lastLocation.moving !== isMoving) {
         if (!this.lastLocation) {
           this.lastLocation = {
             x: body.x,
             y: body.y,
-            rotation: primaryDirection || 'front',
+            rotation: referencePrimaryDirection,
             moving: isMoving,
           };
         }
         this.lastLocation.x = body.x;
         this.lastLocation.y = body.y;
-        this.lastLocation.rotation = primaryDirection || 'front';
+        this.lastLocation.rotation = referencePrimaryDirection;
         this.lastLocation.moving = isMoving;
         this.emitMovement(this.lastLocation);
       }
@@ -462,11 +466,27 @@ export default function WorldMap(): JSX.Element {
       }
     }
 
+    const targetHasFocusClass = (target: any): boolean => {
+      if (!target) {
+        return false
+      }
+
+      let foundVal = false;
+
+      // I hate this linting rule
+      Constants.PRIORITY_FOCUS_CLASSES.forEach(className => {
+        if (target.classList.contains(className)) {
+          foundVal = true;
+        }
+      });
+
+      return foundVal;
+    }
+
     // Toggling keyboard based off of input focus class
     window.addEventListener('focusin', (e) => {
-      if (e.target &&
-        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
-      ) {
+      if (game.input.keyboard.enabled &&
+        targetHasFocusClass(e.target)) {
         game.input.keyboard.enabled = false;
       }
     });
@@ -474,8 +494,7 @@ export default function WorldMap(): JSX.Element {
     window.addEventListener('focusout', (e) => {
       if (
         !game.input.keyboard.enabled &&
-        e.target &&
-        (e.target as any).classList.contains(Constants.PRIORITY_FOCUS_CLASS_FOR_INPUT)
+        targetHasFocusClass(e.target)
       ) {
         game.input.keyboard.enabled = true;
       }

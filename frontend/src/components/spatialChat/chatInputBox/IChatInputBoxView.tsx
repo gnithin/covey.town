@@ -1,7 +1,5 @@
 interface IChatInputBoxView {
-    value: string;
-    onInputChanged: (inputValue: string) => void;
-    onInputSubmit: () => Promise<void>;
+    onInputSubmit: (chatMessage: string) => Promise<void>;
 }
 
 export default IChatInputBoxView;

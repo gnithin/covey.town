@@ -9,8 +9,8 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { ChatEntry } from '../../../classes/SpatialChat';
-
 
 interface IConversationView {
     chatEntry: ChatEntry;
@@ -48,7 +48,6 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                     backgroundColor: 'rgb(189, 255, 207)',
                     color: "#000",
                     textAlign: 'left',
-                    padding: "10px",
                 }}
                 onMouseOver={() => {
                     setDisplayMenu(true);
@@ -57,7 +56,14 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                     setDisplayMenu(false);
                 }}
             >
-                {chatEntry.message}
+                {/* eslint-disable-next-line react/no-danger */}
+                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chatEntry.message) }}
+                    className="ql-editor"
+                    style={{
+                        padding: "10px"
+                    }}
+                />
+
                 <div
                     className="menu"
                     style={{

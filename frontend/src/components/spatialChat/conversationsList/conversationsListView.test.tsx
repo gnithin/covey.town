@@ -35,7 +35,6 @@ const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
     return {
         chat: {
             chats: chatEntries,
-            current_message: "Sample Message"
         }
     }
 }

@@ -221,8 +221,6 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const page = useMemo(() => {
-    // TODO: This is only temporary. This needs to be removed
-    console.log("DEBUG: REMOVE ME PLEASE!")
     if (!appState.sessionToken) {
       return <Login doLogin={setupGameController} />;
     } if (!videoInstance) {
@@ -234,9 +232,6 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
         display: "flex",
         flexDirection: "column",
       }}>
-        {/* 
-        TODO: This needs to be cleaned up. Phaser is not respecting CSS rules apparently.
-        */}
         <div style={{
           display: "flex",
           flexDirection: "row",

@@ -422,6 +422,18 @@ describe('block-user chat message', () => {
 
   it('when unblock is called without blocking a player first', async () =>  { 
     // TODO
+  
+  });
+
+  it('player to be blocked called two or more times in a row', async () =>  { 
+    try {
+      blockPlayer(0, players[1].id); 
+      blockPlayer(0, players[1].id);  
+      sendMessage(0, 'go get some coffee', 80); 
+      fail('Expected blockPlayer to throw an error');
+    } catch (error) {
+      // Expected error
+    }
   });
 
   

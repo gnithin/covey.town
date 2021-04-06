@@ -29,36 +29,54 @@ export default function ChatSettings() {
       {type: ChatEditorType.RICH_TEXT_EDITOR, text: 'Rich Text Editor'}
     ]
   const dispatch = useDispatch();  
-  const localEditorType: ChatEditorType = useSelector((state: RootState) => state.chat.settingChatEditorType);
-  const [lastEditorType, setLastEditorType] = useState<string>(
-    localEditorType.toString()
-  );
-  const localRadius: number = useSelector((state: RootState) => state.chat.settingChatBroadcastRadius);
-  const [lastRadius, setLastRadius] = useState<number>(
-    localRadius
-  );
+  const currentEditorType: ChatEditorType = useSelector((state: RootState) => state.chat.settingChatEditorType);  
+  const [lastEditorType, setLastEditorType] = useState<string |  null>();
+  const currentRadius: number = useSelector((state: RootState) => state.chat.settingChatBroadcastRadius);
+  const [lastRadius, setLastRadius] = useState(currentRadius); 
+
   const changeChatEditor = (editorType: ChatEditorType) => {
     dispatch(
         changeEditorTypeAction (editorType)
     );
   };
   
-  const openSettings = useCallback(()=>{
+  const openSettings = useCallback(()=>{       
     onOpen();    
   }, [onOpen]);
 
-  const closeSettings = useCallback(()=>{
+  const closeSettings = useCallback(()=>{   
+    setLastEditorType(null);    
     onClose();    
   }, [onClose]);
 
+  const toast = useToast();
+
+  const validateSettings = () =>{
+      if(!lastRadius || lastRadius < 80 || lastRadius > 1000){
+        toast({
+            title: 'Unable to delete town',
+            description: 'Broadcast Radius should be between 80 and 1000',
+            status: 'error'
+          });  
+        return false;
+      }
+      return true;
+  };
+
   const updateSettings = () => {  
+    if(validateSettings()){
     if(lastEditorType === '1')    
     changeChatEditor(ChatEditorType.DEFAULT_EDITOR);
     else
-    changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
+    changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);    
+    if(lastRadius)
+    {
     changeBroadcastRadius(lastRadius);
+    alert(currentRadius);
+    }
     closeSettings();
-  };  
+  }
+  }; 
 
 
   return (
@@ -72,13 +90,13 @@ export default function ChatSettings() {
         <ModalHeader>Edit Chat Settings</ModalHeader>
         <ModalCloseButton/>
         <form onSubmit={(ev)=>{ev.preventDefault(); updateSettings(); }}>
-          <ModalBody pb={6}>
+          <ModalBody pb={8}>
           <FormControl fullWidth>
           <FormLabel>
             Chat Editor Type
           </FormLabel>
             <Select       
-            value ={lastEditorType }
+            value ={lastEditorType || currentEditorType.toString() }
             onChange={(e) => setLastEditorType(e.target.value) }  >
             {chateditorOptions.map((editor, index) => (
               <option value={editor.type.toString()} key={editor.type.toString()}>
@@ -90,9 +108,9 @@ export default function ChatSettings() {
             <FormControl>
               <FormLabel htmlFor="chatRadius">Chat Radius</FormLabel>
               <Input data-testid="chatRadius" id="chatRadius" placeholder="80"
-              value = {lastRadius  }
+              value = { lastRadius }
               onChange = {(e) => setLastRadius(Number(e.target.value))}
-              name="chatRadius" type="text"  />
+              name="chatRadius" type="number" />
             </FormControl>
           </ModalBody>
 

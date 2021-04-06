@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     MenuItem, Typography
   } from '@material-ui/core';
@@ -18,8 +18,9 @@ import {
     useDisclosure,
     useToast
   } from '@chakra-ui/react';
-import { changeEditorTypeAction } from '../../../redux/actions/chatReducerActions'
+import { changeEditorTypeAction, changeBroadcastRadius } from '../../../redux/actions/chatReducerActions'
 import { ChatEditorType } from '../../../classes/SpatialChat';
+import { RootState } from '../../../redux/store'
 
 export default function ChatSettings() {
   const {isOpen, onOpen, onClose} = useDisclosure()
@@ -28,8 +29,13 @@ export default function ChatSettings() {
       {type: ChatEditorType.RICH_TEXT_EDITOR, text: 'Rich Text Editor'}
     ]
   const dispatch = useDispatch();  
-  const [localEditorType, setLocalEditorType] = useState<string>(
-    ChatEditorType.DEFAULT_EDITOR.toString()
+  const localEditorType: ChatEditorType = useSelector((state: RootState) => state.chat.settingChatEditorType);
+  const [lastEditorType, setLastEditorType] = useState<string>(
+    localEditorType.toString()
+  );
+  const localRadius: number = useSelector((state: RootState) => state.chat.settingChatBroadcastRadius);
+  const [lastRadius, setLastRadius] = useState<number>(
+    localRadius
   );
   const changeChatEditor = (editorType: ChatEditorType) => {
     dispatch(
@@ -45,8 +51,12 @@ export default function ChatSettings() {
     onClose();    
   }, [onClose]);
 
-  const updateSettings = () => {      
+  const updateSettings = () => {  
+    if(lastEditorType === '1')    
+    changeChatEditor(ChatEditorType.DEFAULT_EDITOR);
+    else
     changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
+    changeBroadcastRadius(lastRadius);
     closeSettings();
   };  
 
@@ -68,8 +78,8 @@ export default function ChatSettings() {
             Chat Editor Type
           </FormLabel>
             <Select       
-            value ={localEditorType}
-            onChange={(e) => setLocalEditorType(e.target.value as string) }  >
+            value ={lastEditorType }
+            onChange={(e) => setLastEditorType(e.target.value) }  >
             {chateditorOptions.map((editor, index) => (
               <option value={editor.type.toString()} key={editor.type.toString()}>
                 {editor.text}
@@ -79,7 +89,10 @@ export default function ChatSettings() {
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="chatRadius">Chat Radius</FormLabel>
-              <Input data-testid="chatRadius" id="chatRadius" placeholder="80" name="chatRadius" type="text"  />
+              <Input data-testid="chatRadius" id="chatRadius" placeholder="80"
+              value = {lastRadius  }
+              onChange = {(e) => setLastRadius(Number(e.target.value))}
+              name="chatRadius" type="text"  />
             </FormControl>
           </ModalBody>
 

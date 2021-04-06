@@ -20,9 +20,8 @@ const render = (
     } = {}
 ) => {
     const store = createStore(reducer, initialState);
-    const Wrapper: React.FC = ({ children }) => {
-        return <Provider store={store}>{children}</Provider>
-    }
+    // eslint-disable-next-line react/prop-types
+    const Wrapper: React.FC = ({ children }) => <Provider store={store}>{children}</Provider>
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 

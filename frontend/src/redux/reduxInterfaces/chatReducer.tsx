@@ -1,6 +1,7 @@
-import { ChatEntry } from "../../classes/SpatialChat";
+import { ChatEditorType, ChatEntry } from "../../classes/SpatialChat";
 
 export interface ChatReducerState {
     chats: ChatEntry[];
-    current_message: string;
+    settingChatEditorType: ChatEditorType,
+    settingChatBroadcastRadius: number,
 }

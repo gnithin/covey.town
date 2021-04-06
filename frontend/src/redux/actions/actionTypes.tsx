@@ -1,4 +1,5 @@
 export default {
-    ACTION_UPDATE_CURRENT_MESSAGE: "update_current_message",
     ACTION_ADD_CHAT_ENTRY: "add_chat_entry",
+    ACTION_CHANGE_EDITOR_TYPE: "change_editor_type",
+    ACTION_CHANGE_BROADCAST_RADIUS: "change_broadcast_radius",
 };

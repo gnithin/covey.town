@@ -1,37 +1,37 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { updateCurrentMessageAction } from '../../../redux/actions';
+import { useSelector } from 'react-redux';
 import ChatInputBoxView from './chatInputBoxView';
 import useCoveyAppState from '../../../hooks/useCoveyAppState';
-import Constants from '../../../constants';
+import { RootState } from '../../../redux/store';
 
 const ChatInputBoxContainer: React.FunctionComponent = () => {
-    const chat = useSelector((state: RootState) => state.chat.current_message);
-    const dispatch = useDispatch();
-
     const { socket } = useCoveyAppState();
-    const sendChatMessage = () => {
-        socket?.emit('sendChatMessage', {
-            message: chat,
-            broadcastRadius: Constants.DEFAULT_BROADCAST_RADIUS,
-        });
+    const broadcastRadius = useSelector((state: RootState) => state.chat.settingChatBroadcastRadius);
 
-        // Set the input to empty after submitting
-        dispatch(updateCurrentMessageAction(""));
+    const sendChatMessage = (chatMessage: string, radius: number) => {
+        socket?.emit('sendChatMessage', {
+            message: chatMessage,
+            broadcastRadius: radius,
+        });
     }
 
+    /* NOTE: Before changing the layout or the styling, make sure to test out the CSS. It is pretty delicately placed */
     return (
-        <div data-testid="chat-input-box-wrapper">
-            <ChatInputBoxView
-                value={chat}
-                onInputChanged={(inputValue) => {
-                    dispatch(updateCurrentMessageAction(inputValue));
-                }}
-                onInputSubmit={async () => {
-                    sendChatMessage();
-                }}
-            />
+        <div data-testid="chat-input-box-wrapper" style={{
+            flex: "none",
+        }}>
+            <div className="chat-box-container" style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+            }}>
+
+                <ChatInputBoxView
+                    onInputSubmit={async (chatMessage) => {
+                        sendChatMessage(chatMessage, broadcastRadius);
+                    }}
+                />
+            </div>
         </div>
     )
 };

@@ -1,0 +1,4 @@
+.custom-quill-changes .ql-editor {
+    max-height: 90px;
+    overflow: scroll;
+}

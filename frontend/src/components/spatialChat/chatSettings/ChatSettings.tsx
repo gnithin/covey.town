@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {MenuItem, FormControl, Select, Typography} from '@material-ui/core';
+import {
+    MenuItem, Typography
+  } from '@material-ui/core';
 import {
     Button,
-    FormLabel,    
+    FormLabel,  
+    FormControl, Select , 
     Input,
     Modal,
     ModalBody,
@@ -24,7 +27,10 @@ export default function ChatSettings() {
       {type: ChatEditorType.DEFAULT_EDITOR, text: 'Default Editor'},
       {type: ChatEditorType.RICH_TEXT_EDITOR, text: 'Rich Text Editor'}
     ]
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
+  const [localEditorType, setLocalEditorType] = useState<string>(
+    ChatEditorType.DEFAULT_EDITOR.toString()
+  );
   const changeChatEditor = (editorType: ChatEditorType) => {
     dispatch(
         changeEditorTypeAction (editorType)
@@ -42,16 +48,13 @@ export default function ChatSettings() {
   const updateSettings = () => {      
     changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
     closeSettings();
-  };
-  const doNothing = () => {          
-    changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
-  };
+  };  
 
 
   return (
     <>
         <MenuItem onClick={openSettings}>
-          <Typography variant="body1">Chat Settings</Typography>
+        <Typography variant="body1">Chat Settings</Typography>
         </MenuItem>
         <Modal isOpen={isOpen} onClose={closeSettings} >
       <ModalOverlay/>
@@ -61,17 +64,16 @@ export default function ChatSettings() {
         <form onSubmit={(ev)=>{ev.preventDefault(); updateSettings(); }}>
           <ModalBody pb={6}>
           <FormControl fullWidth>
-          <Typography variant="subtitle2" gutterBottom>
+          <FormLabel>
             Chat Editor Type
-          </Typography>
+          </FormLabel>
             <Select       
-            
-            onChange={(e) => doNothing() } variant ="outlined"
-          >
-            {chateditorOptions.map((editor) => (
-              <MenuItem  key={editor.type.toString()}>
+            value ={localEditorType}
+            onChange={(e) => setLocalEditorType(e.target.value as string) }  >
+            {chateditorOptions.map((editor, index) => (
+              <option value={editor.type.toString()} key={editor.type.toString()}>
                 {editor.text}
-              </MenuItem>
+              </option>
             ))}
           </Select>
             </FormControl>

@@ -87,6 +87,11 @@ export default class CoveyTownController {
   /** A map of the PlayerSessions to the corresponding CoveyTownListeners * */
   private _listeners: Map<PlayerSession, CoveyTownListener> = new Map();
 
+  // each player maintains a list of blocked players
+  private _blockedPlayerSessions: Map<PlayerSession, PlayerSession[]> = new Map();
+
+  // private blockedUsers: Map<string, string[]> = new Map();   // playerId(string)
+
   private readonly _coveyTownID: string;
 
   private _friendlyName: string;
@@ -142,6 +147,12 @@ export default class CoveyTownController {
       socket.on('sendChatMessage', (message: IncomingChatMessage) => {
         this.onSendChatMessage(session, message);
       });
+      socket.on('blockPlayerInChat', (playerID: string) => {
+        this.onBlockPlayer(session, playerID);
+      });
+      socket.on('unblockPlayerInChat', (playerID: string) => {
+        this.onUnblockPlayer(session, playerID);
+      });
     }
   }
 
@@ -154,6 +165,18 @@ export default class CoveyTownController {
       return d <= Math.max(0, incomingMessage.broadcastRadius);
     };
     const nearbyPlayerSessions = this._sessions.filter(s => isInChatRadius(s.player));
+
+    const notBlocked = (s: PlayerSession) => {
+      const length = this._blockedPlayerSessions.get(session)?.length;
+      for(let i=0; i<(length as number); i++) {
+        if (this._blockedPlayerSessions.get(session)?.includes(s)) {
+          return false;
+        }
+      }
+      return true;
+    };
+    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => notBlocked(s));
+
     const receivingPlayers = nearbyPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
     const timestamp = new Date().getTime();
     nearbyPlayerSessions.forEach(nearbyPlayerSession => {
@@ -165,6 +188,24 @@ export default class CoveyTownController {
       });
     });
   }
+
+
+  private onBlockPlayer(session: PlayerSession, playerID: string): void {
+    // create the key, value pair if it is not present in the map
+    if (!this._blockedPlayerSessions.has(session)) {
+      this._blockedPlayerSessions.set(session, []);
+    }
+    // add the blocked player to the block list of 'session'
+    const blockPlayerSession = this._sessions.find((s) => s.player.id === playerID);
+    this._blockedPlayerSessions.get(session)?.push(blockPlayerSession as PlayerSession);
+  }
+
+
+  private onUnblockPlayer(session: PlayerSession, playerID: string): void {
+    const blockedPlayerSession = this._sessions.findIndex((s) => s.player.id === playerID);
+    this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSession, 1);
+  }
+
 
   /**
    * Updates the location of a player within the town

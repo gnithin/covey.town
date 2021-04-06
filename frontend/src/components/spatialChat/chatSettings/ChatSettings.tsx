@@ -17,19 +17,25 @@ import {
     useDisclosure,
     useToast
   } from '@chakra-ui/react';
-  
+
 export default function ChatSettings() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclosure()
+  
+  const openSettings = useCallback(()=>{
+    onOpen();    
+  }, [onOpen]);
+
   const closeSettings = useCallback(()=>{
-  }, []);
+    onClose();    
+  }, [onClose]);
+
 
   return (
     <>
-        <MenuItem onClick={() => setMenuOpen(true)}>
+        <MenuItem onClick={openSettings}>
           <Typography variant="body1">Chat Settings</Typography>
         </MenuItem>
-        <Modal isOpen={menuOpen} onClose={() => closeSettings()} >
+        <Modal isOpen={isOpen} onClose={closeSettings} >
       <ModalOverlay/>
       <ModalContent>
         <ModalHeader>Edit Chat Settings</ModalHeader>
@@ -50,7 +56,7 @@ export default function ChatSettings() {
             <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' >
               Update
             </Button>
-            <Button>Cancel</Button>
+            <Button onClick={closeSettings}>Cancel</Button>
           </ModalFooter>
         </form>
       </ModalContent>

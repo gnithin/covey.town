@@ -177,14 +177,14 @@ export default class CoveyTownController {
     };
     const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => notBlocked(s));
 
-    const receivingPlayers = nearbyPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
+    const receivingPlayers = nearbyUnblockedPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
     const timestamp = new Date().getTime();
-    nearbyPlayerSessions.forEach(nearbyPlayerSession => {
-      this._listeners.get(nearbyPlayerSession)?.onReceiveChatMessage({
+    nearbyUnblockedPlayerSessions.forEach(nearbyUnblockedPlayerSession => {
+      this._listeners.get(nearbyUnblockedPlayerSession)?.onReceiveChatMessage({
         sender,
         timestamp,
         message: incomingMessage.message,
-        receivingPlayers: nearbyPlayerSession.player.id === sender.id ? receivingPlayers : undefined,
+        receivingPlayers: nearbyUnblockedPlayerSession.player.id === sender.id ? receivingPlayers : undefined,
       });
     });
   }

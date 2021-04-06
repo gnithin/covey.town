@@ -34,7 +34,7 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
                 settingChatBroadcastRadius: action.broadcastRadius
             }
 
-        case actionTypes.BLOCK_PLAYER:
+        case actionTypes.ACTION_BLOCK_PLAYER:
             return {
                 ...state,
                 blockedPlayerIds: [
@@ -43,7 +43,7 @@ const chatReducer = (state: ChatReducerState = initialState, action: AnyAction):
                 ],
             };
 
-        case actionTypes.UNBLOCK_PLAYER:
+        case actionTypes.ACTION_UNBLOCK_PLAYER:
             return {
                 ...state,
                 blockedPlayerIds: state.blockedPlayerIds.filter(id => id !== action.playerId),

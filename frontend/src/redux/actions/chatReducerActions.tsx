@@ -19,11 +19,11 @@ export const changeBroadcastRadius = (broadcastRadius: number): AnyAction => ({
 })
 
 export const blockPlayerAction = (playerId: string): AnyAction => ({
-    type: actionTypes.BLOCK_PLAYER,
+    type: actionTypes.ACTION_BLOCK_PLAYER,
     playerId,
 })
 
 export const unblockPlayerAction = (playerId: string): AnyAction => ({
-    type: actionTypes.UNBLOCK_PLAYER,
+    type: actionTypes.ACTION_UNBLOCK_PLAYER,
     playerId,
 })

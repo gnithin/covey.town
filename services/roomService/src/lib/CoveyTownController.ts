@@ -166,16 +166,8 @@ export default class CoveyTownController {
     };
     const nearbyPlayerSessions = this._sessions.filter(s => isInChatRadius(s.player));
 
-    const notBlocked = (s: PlayerSession) => {
-      const length = this._blockedPlayerSessions.get(session)?.length;
-      for(let i=0; i<(length as number); i++) {
-        if (this._blockedPlayerSessions.get(session)?.includes(s)) {
-          return false;
-        }
-      }
-      return true;
-    };
-    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => notBlocked(s));
+    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => 
+      !this._blockedPlayerSessions.get(session)?.includes(s));
 
     const receivingPlayers = nearbyUnblockedPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
     const timestamp = new Date().getTime();
@@ -202,8 +194,8 @@ export default class CoveyTownController {
 
 
   private onUnblockPlayer(session: PlayerSession, playerID: string): void {
-    const blockedPlayerSession = this._sessions.findIndex((s) => s.player.id === playerID);
-    this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSession, 1);
+    const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
+    this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
   }
 
 

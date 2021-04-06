@@ -420,5 +420,9 @@ describe('block-user chat message', () => {
     expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2], players[3]])}));           
   });
 
+  it('when unblock is called without blocking a player first', async () =>  { 
+    // TODO
+  });
+
   
 });

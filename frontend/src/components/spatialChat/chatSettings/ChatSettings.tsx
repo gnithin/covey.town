@@ -15,7 +15,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { MenuItem, Typography } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatEditorType } from '../../../classes/SpatialChat';
 import {
@@ -42,7 +42,7 @@ export default function ChatSettings() {
   const currentRadius: number = useSelector(
     (state: RootState) => state.chat.settingChatBroadcastRadius,
   );
-  const [lastRadius, setLastRadius] = useState<number | null>();
+  const [lastRadius, setLastRadius] = useState<string>();
 
   const changeChatEditor = (editorType: ChatEditorType) => {
     dispatch(changeEditorTypeAction(editorType));
@@ -50,22 +50,28 @@ export default function ChatSettings() {
   const changeChatRadius = (radius: number) => {
     dispatch(changeBroadcastRadius(radius));
   };
+  useEffect(() => {
+    setLastRadius(currentRadius.toString());
+  }, [currentRadius]);
 
-  const openSettings = useCallback(() => {
+  const openSettings = () => {
     onOpen();
-  }, [onOpen]);
+  };
 
   // Resetting the local states on close modal.
-  const closeSettings = useCallback(() => {
+  const closeSettings = () => {
     setLastEditorType(null);
-    setLastRadius(null);
+    setLastRadius(currentRadius.toString());
     onClose();
-  }, [onClose]);
+  };
 
   const toast = useToast();
 
+  const isNumeric = (str: any): boolean =>  !Number.isNaN(Number(str));
+
   const validateSettings = () => {
-    if (lastRadius && (lastRadius < 80 || lastRadius > 1000)) {
+    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) ||  Number(lastRadius) < 80 || Number(lastRadius) > 1000)
+     {
       toast({
         title: 'Unable to update chat settings',
         description: 'Broadcast Radius should be between 80 and 1000',
@@ -85,7 +91,7 @@ export default function ChatSettings() {
   };
   const updateChatRadius = () => {
     if (lastRadius) {
-      changeChatRadius(lastRadius);
+      changeChatRadius(Number(lastRadius));
     }
   };
 
@@ -143,10 +149,10 @@ export default function ChatSettings() {
                   data-testid='chatRadius'
                   id='chatRadius'
                   placeholder='80'
-                  value={lastRadius || currentRadius}
-                  onChange={e => setLastRadius(Number(e.target.value))}
+                  value={lastRadius}
+                  onChange={e => setLastRadius(e.target.value)}
                   name='chatRadius'
-                  type='number'
+                  type='text'
                 />
               </FormControl>
             </ModalBody>

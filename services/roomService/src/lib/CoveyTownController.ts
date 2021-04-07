@@ -165,10 +165,10 @@ export default class CoveyTownController {
       return d <= Math.max(0, incomingMessage.broadcastRadius);
     };
     const nearbyPlayerSessions = this._sessions.filter(s => isInChatRadius(s.player));
-
-    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => 
-      !this._blockedPlayerSessions.get(session)?.includes(s));
-
+    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => (
+      !this._blockedPlayerSessions.get(session)?.includes(s) &&
+      !this._blockedPlayerSessions.get(s)?.includes(session)
+    ));
     const receivingPlayers = nearbyUnblockedPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
     const timestamp = new Date().getTime();
     nearbyUnblockedPlayerSessions.forEach(nearbyUnblockedPlayerSession => {
@@ -181,7 +181,6 @@ export default class CoveyTownController {
     });
   }
 
-
   private onBlockPlayer(session: PlayerSession, playerID: string): void {
     // create the key, value pair if it is not present in the map
     if (!this._blockedPlayerSessions.has(session)) {
@@ -192,9 +191,7 @@ export default class CoveyTownController {
     if (!this._blockedPlayerSessions.get(session)?.includes(blockPlayerSession as PlayerSession)) {
       this._blockedPlayerSessions.get(session)?.push(blockPlayerSession as PlayerSession);
     }
-    
   }
-
 
   private onUnblockPlayer(session: PlayerSession, playerID: string): void {
     const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
@@ -202,7 +199,6 @@ export default class CoveyTownController {
       this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
     } 
   }
-
 
   /**
    * Updates the location of a player within the town

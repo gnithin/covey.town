@@ -339,9 +339,40 @@ describe('block-user chat message', () => {
     });
   }
 
+  it('should not receive messages from nearby blocked players', async () => {
+    // Player 0 blocks player 1
+    blockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World', 80);
+    // Check player 0 does not recieve the message
+    expect(mockSockets[0].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players receive the message
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+  });
+
+  it('should receive messages from player again when he/she is unblocked', async () => {
+    // Player 0 blocks player 1
+    blockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World', 80);
+    // Check player 0 does not recieve the message
+    expect(mockSockets[0].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players receive the message
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // player 0 unblocks player 1
+    unblockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World Again', 80);
+    // check if all players receive the message
+    mockSockets.forEach(socket => expect(socket.emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()));
+  });
 
   it('should broadcast message to the nearby unblocked players and not to the blocked players', async () => {
-    // Player 0 blocks player 1 and player2
+    // Player 0 blocks player 1 and player 2
     blockPlayer(0, players[1].id);
     blockPlayer(0, players[2].id);
     // Player 0 sends a message via the socket

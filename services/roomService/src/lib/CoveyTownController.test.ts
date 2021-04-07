@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {mock, mockReset} from 'jest-mock-extended';
+import {mock, mockReset, notEmpty} from 'jest-mock-extended';
 import {Socket} from 'socket.io';
 import TwilioVideo from './TwilioVideo';
 import Player from '../types/Player';
@@ -381,7 +381,7 @@ describe('block-user chat message', () => {
     sendMessage(0, 'weather is hot today', 80);
     sendMessage(1, 'weather is cold today', 80);
     sendMessage(2, 'weather is warm today', 80);
-    
+    expect(mockSockets[3].emit).toHaveBeenCalledTimes(1);
     expect(mockSockets[3].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({message: 'weather is warm today'}));
   });
 
@@ -420,20 +420,24 @@ describe('block-user chat message', () => {
     expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2], players[3]])}));           
   });
 
-  it('when unblock is called without blocking a player first', async () =>  { 
-    // TODO
+  it('unblocking a player who is not blocked', async () =>  { 
+    // unblocking a player multiple time is the same as unblocking the player once
+    unblockPlayer(0, players[1].id);
+    sendMessage(0, 'We should play with legos at camp', 80); 
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
   
   });
 
-  it('player to be blocked called two or more times in a row', async () =>  { 
-    try {
-      blockPlayer(0, players[1].id); 
-      blockPlayer(0, players[1].id);  
-      sendMessage(0, 'go get some coffee', 80); 
-      fail('Expected blockPlayer to throw an error');
-    } catch (error) {
-      // Expected error
-    }
+  it('blocking someone who is already blocked', async () =>  { 
+    // blocking a player multiple time is the same as blocking the player once
+    blockPlayer(0, players[1].id); 
+    blockPlayer(0, players[1].id); 
+    blockPlayer(0, players[1].id);  
+    sendMessage(0, 'go get some coffee', 80); 
+    expect(mockSockets[1].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[0].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
   });
 
   

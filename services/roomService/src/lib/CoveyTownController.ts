@@ -189,9 +189,7 @@ export default class CoveyTownController {
     }
     // add the blocked player to the block list of 'session' if not already there
     const blockPlayerSession = this._sessions.find((s) => s.player.id === playerID);
-    if (this._blockedPlayerSessions.get(session)?.includes(blockPlayerSession as PlayerSession)) {
-      throw new Error('player session already exists in blocked list');
-    } else {
+    if (!this._blockedPlayerSessions.get(session)?.includes(blockPlayerSession as PlayerSession)) {
       this._blockedPlayerSessions.get(session)?.push(blockPlayerSession as PlayerSession);
     }
     
@@ -202,9 +200,7 @@ export default class CoveyTownController {
     const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
     if (blockedPlayerSessionIndex !== -1) {
       this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
-    } else {
-      throw new Error('Cannot find player session. Session does not exist in blocked list');
-    }
+    } 
   }
 
 

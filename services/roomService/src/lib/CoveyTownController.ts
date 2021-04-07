@@ -87,10 +87,8 @@ export default class CoveyTownController {
   /** A map of the PlayerSessions to the corresponding CoveyTownListeners * */
   private _listeners: Map<PlayerSession, CoveyTownListener> = new Map();
 
-  // each player maintains a list of blocked players
+  /** A map that keeps track of a chat block list for each PlayerSession */
   private _blockedPlayerSessions: Map<PlayerSession, PlayerSession[]> = new Map();
-
-  // private blockedUsers: Map<string, string[]> = new Map();   // playerId(string)
 
   private readonly _coveyTownID: string;
 
@@ -156,6 +154,11 @@ export default class CoveyTownController {
     }
   }
 
+  /**
+   * Broadcasts the provided message to all nearby players who are not blocked.
+   * @param session PlayerSession of the message sender
+   * @param incomingMessage Message to be broadcasted
+   */
   private onSendChatMessage(session: PlayerSession, incomingMessage: IncomingChatMessage): void {
     const sender = session.player;
     const isInChatRadius = (p: Player) => {
@@ -181,6 +184,11 @@ export default class CoveyTownController {
     });
   }
 
+  /**
+   * Adds a player to the chat block list.
+   * @param session PlayerSession who's chat block list should be updated
+   * @param playerID ID of the player to block
+   */
   private onBlockPlayer(session: PlayerSession, playerID: string): void {
     // create the key, value pair if it is not present in the map
     if (!this._blockedPlayerSessions.has(session)) {
@@ -193,6 +201,11 @@ export default class CoveyTownController {
     }
   }
 
+  /**
+   * Removes a player from the chat block list.
+   * @param session PlayerSession who's chat block list should be updated
+   * @param playerID ID of the player to unblock
+   */
   private onUnblockPlayer(session: PlayerSession, playerID: string): void {
     const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
     if (blockedPlayerSessionIndex !== -1) {

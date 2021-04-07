@@ -65,7 +65,7 @@ export default function ChatSettings() {
   const toast = useToast();
 
   const validateSettings = () => {
-    if (!lastRadius || lastRadius < 80 || lastRadius > 1000) {
+    if (lastRadius && (lastRadius < 80 || lastRadius > 1000)) {
       toast({
         title: 'Unable to update chat settings',
         description: 'Broadcast Radius should be between 80 and 1000',

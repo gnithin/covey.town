@@ -8,7 +8,6 @@ export const addNewChatEntryAction = (chatEntry: ChatEntry): AnyAction => ({
     chatEntry,
 });
 
-
 export const changeEditorTypeAction = (editorType: ChatEditorType): AnyAction => ({
     type: actionTypes.ACTION_CHANGE_EDITOR_TYPE,
     editorType,
@@ -17,4 +16,14 @@ export const changeEditorTypeAction = (editorType: ChatEditorType): AnyAction =>
 export const changeBroadcastRadius = (broadcastRadius: number): AnyAction => ({
     type: actionTypes.ACTION_CHANGE_BROADCAST_RADIUS,
     broadcastRadius,
+})
+
+export const blockPlayerAction = (playerId: string): AnyAction => ({
+    type: actionTypes.ACTION_BLOCK_PLAYER,
+    playerId,
+})
+
+export const unblockPlayerAction = (playerId: string): AnyAction => ({
+    type: actionTypes.ACTION_UNBLOCK_PLAYER,
+    playerId,
 })

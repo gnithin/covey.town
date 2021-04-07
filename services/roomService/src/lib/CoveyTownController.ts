@@ -87,6 +87,9 @@ export default class CoveyTownController {
   /** A map of the PlayerSessions to the corresponding CoveyTownListeners * */
   private _listeners: Map<PlayerSession, CoveyTownListener> = new Map();
 
+  /** A map that keeps track of a chat block list for each PlayerSession */
+  private _blockedPlayerSessions: Map<PlayerSession, PlayerSession[]> = new Map();
+
   private readonly _coveyTownID: string;
 
   private _friendlyName: string;
@@ -142,9 +145,20 @@ export default class CoveyTownController {
       socket.on('sendChatMessage', (message: IncomingChatMessage) => {
         this.onSendChatMessage(session, message);
       });
+      socket.on('blockPlayerInChat', (playerID: string) => {
+        this.onBlockPlayer(session, playerID);
+      });
+      socket.on('unblockPlayerInChat', (playerID: string) => {
+        this.onUnblockPlayer(session, playerID);
+      });
     }
   }
 
+  /**
+   * Broadcasts the provided message to all nearby players who are not blocked.
+   * @param session PlayerSession of the message sender
+   * @param incomingMessage Message to be broadcasted
+   */
   private onSendChatMessage(session: PlayerSession, incomingMessage: IncomingChatMessage): void {
     const sender = session.player;
     const isInChatRadius = (p: Player) => {
@@ -154,16 +168,49 @@ export default class CoveyTownController {
       return d <= Math.max(0, incomingMessage.broadcastRadius);
     };
     const nearbyPlayerSessions = this._sessions.filter(s => isInChatRadius(s.player));
-    const receivingPlayers = nearbyPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
+    const nearbyUnblockedPlayerSessions = nearbyPlayerSessions.filter(s => (
+      !this._blockedPlayerSessions.get(session)?.includes(s) &&
+      !this._blockedPlayerSessions.get(s)?.includes(session)
+    ));
+    const receivingPlayers = nearbyUnblockedPlayerSessions.map(s => s.player).filter(p => p.id !== sender.id);
     const timestamp = new Date().getTime();
-    nearbyPlayerSessions.forEach(nearbyPlayerSession => {
-      this._listeners.get(nearbyPlayerSession)?.onReceiveChatMessage({
+    nearbyUnblockedPlayerSessions.forEach(nearbyUnblockedPlayerSession => {
+      this._listeners.get(nearbyUnblockedPlayerSession)?.onReceiveChatMessage({
         sender,
         timestamp,
         message: incomingMessage.message,
-        receivingPlayers: nearbyPlayerSession.player.id === sender.id ? receivingPlayers : undefined,
+        receivingPlayers: nearbyUnblockedPlayerSession.player.id === sender.id ? receivingPlayers : undefined,
       });
     });
+  }
+
+  /**
+   * Adds a player to the chat block list.
+   * @param session PlayerSession who's chat block list should be updated
+   * @param playerID ID of the player to block
+   */
+  private onBlockPlayer(session: PlayerSession, playerID: string): void {
+    // create the key, value pair if it is not present in the map
+    if (!this._blockedPlayerSessions.has(session)) {
+      this._blockedPlayerSessions.set(session, []);
+    }
+    // add the blocked player to the block list of 'session' if not already there
+    const blockPlayerSession = this._sessions.find((s) => s.player.id === playerID);
+    if (!this._blockedPlayerSessions.get(session)?.includes(blockPlayerSession as PlayerSession)) {
+      this._blockedPlayerSessions.get(session)?.push(blockPlayerSession as PlayerSession);
+    }
+  }
+
+  /**
+   * Removes a player from the chat block list.
+   * @param session PlayerSession who's chat block list should be updated
+   * @param playerID ID of the player to unblock
+   */
+  private onUnblockPlayer(session: PlayerSession, playerID: string): void {
+    const blockedPlayerSessionIndex = this._blockedPlayerSessions.get(session)?.findIndex((s) => s.player.id === playerID);
+    if (blockedPlayerSessionIndex !== -1) {
+      this._blockedPlayerSessions.get(session)?.splice(blockedPlayerSessionIndex as number, 1);
+    } 
   }
 
   /**

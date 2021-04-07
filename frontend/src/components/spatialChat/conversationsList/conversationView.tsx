@@ -5,12 +5,17 @@ import {
     MenuList,
     MenuItem,
     MenuGroup,
+    Switch,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store'
 import { ChatEntry } from '../../../classes/SpatialChat';
+import { blockPlayerAction, unblockPlayerAction } from '../../../redux/actions';
+import useCoveyAppState from '../../../hooks/useCoveyAppState';
 
 interface IConversationView {
     chatEntry: ChatEntry;
@@ -21,6 +26,19 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
     { chatEntry, loggedInPlayerID }: IConversationView
 ) => {
     const [displayMenu, setDisplayMenu] = useState(false);
+    const blockedPlayerIds: string[] = useSelector((state: RootState) => state.chat.blockedPlayerIds);
+    const { socket } = useCoveyAppState();
+    const dispatch = useDispatch();
+
+    const onToggleBlock = () => {
+        if (blockedPlayerIds.includes(chatEntry.sender.id)) {
+            dispatch(unblockPlayerAction(chatEntry.sender.id));
+            socket?.emit('unblockPlayerInChat', chatEntry.sender.id);
+        } else {
+            dispatch(blockPlayerAction(chatEntry.sender.id));
+            socket?.emit('blockPlayerInChat', chatEntry.sender.id);
+        }
+    }
 
     const renderMenuItems = () => {
         if (chatEntry.sender.id === loggedInPlayerID) {
@@ -33,9 +51,18 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
             )
         }
 
-        // TODO: This needs to be done :)
         return (
-            <MenuItem>Block User</MenuItem>
+            <MenuItem>
+                <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+                    <p>Block Player</p>
+                    <Switch
+                        size="md"
+                        colorScheme="red"
+                        isChecked={blockedPlayerIds.includes(chatEntry.sender.id)}
+                        onChange={onToggleBlock}
+                    />
+                </div>
+            </MenuItem>
         )
     };
 
@@ -70,7 +97,7 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
                         display: displayMenu ? "block" : "none",
                     }}
                 >
-                    <Menu size="sm">
+                    <Menu size="sm" closeOnSelect={false}>
                         <MenuButton>
                             <ChevronDownIcon />
                         </MenuButton>

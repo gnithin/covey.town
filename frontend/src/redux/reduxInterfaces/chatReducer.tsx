@@ -4,4 +4,5 @@ export interface ChatReducerState {
     chats: ChatEntry[];
     settingChatEditorType: ChatEditorType,
     settingChatBroadcastRadius: number,
+    blockedPlayerIds: string[];
 }

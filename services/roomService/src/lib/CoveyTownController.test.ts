@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {mock, mockReset} from 'jest-mock-extended';
+import {mock, mockReset, notEmpty} from 'jest-mock-extended';
 import {Socket} from 'socket.io';
 import TwilioVideo from './TwilioVideo';
 import Player from '../types/Player';
@@ -311,4 +311,165 @@ describe('Chat Messages', () => {
     expect(mockSockets[2].emit.mock.calls[numberOfMessagesReceived-3]).toEqual(expect.arrayContaining(['receiveChatMessage', expect.objectContaining({message: 'Message 1', sender: players[0]})]));                
   });
 
+});
+
+
+describe('block-user chat message', () => {
+  function sendMessage(playerIndex: number, message: string, broadcastRadius : number) {
+    mockSockets[playerIndex].on.mock.calls.forEach(call => {
+      if (call[0] === 'sendChatMessage')
+        call[1]({
+          message,
+          broadcastRadius,
+        });
+    });
+  }
+  
+  function blockPlayer(playerIndex: number, playerID: string) {
+    mockSockets[playerIndex].on.mock.calls.forEach(call => {
+    if (call[0] === 'blockPlayerInChat')
+      call[1](playerID);
+    });
+  }
+
+  function unblockPlayer(playerIndex: number, playerID: string) {
+    mockSockets[playerIndex].on.mock.calls.forEach(call => {
+    if (call[0] === 'unblockPlayerInChat')
+      call[1](playerID);
+    });
+  }
+
+  it('should not receive messages from nearby blocked players', async () => {
+    // Player 0 blocks player 1
+    blockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World', 80);
+    // Check player 0 does not recieve the message
+    expect(mockSockets[0].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players receive the message
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+  });
+
+  it('should receive messages from player again when he/she is unblocked', async () => {
+    // Player 0 blocks player 1
+    blockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World', 80);
+    // Check player 0 does not recieve the message
+    expect(mockSockets[0].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players receive the message
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // player 0 unblocks player 1
+    unblockPlayer(0, players[1].id);
+    // Player 1 sends a message via the socket
+    sendMessage(1, 'Hello World Again', 80);
+    // check if all players receive the message
+    mockSockets.forEach(socket => expect(socket.emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()));
+  });
+
+  it('should broadcast message to the nearby unblocked players and not to the blocked players', async () => {
+    // Player 0 blocks player 1 and player 2
+    blockPlayer(0, players[1].id);
+    blockPlayer(0, players[2].id);
+    // Player 0 sends a message via the socket
+    sendMessage(0, 'Hello World', 80);
+    // Check player 1 and player2 does not recieve the message
+    expect(mockSockets[1].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    // Check other players receive the message
+    expect(mockSockets[0].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+  });
+
+  it('should broadcast message to the player again when he/she is unblocked', async () => {
+    // Player 0 blocks player 1
+    blockPlayer(0, players[1].id);
+    // Player 0 sends a message via the socket
+    sendMessage(0, 'Hello World', 80);
+    // Check player 1 does not recieve the message
+    expect(mockSockets[1].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players receive the message
+    expect(mockSockets[0].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // player 0 unblocks player 1
+    unblockPlayer(0, players[1].id);
+    // Player 0 sends a message via the socket
+    sendMessage(0, 'Hello World Again', 80);
+    // check if all players including player 1 receive the message
+    mockSockets.forEach(socket => expect(socket.emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()));
+  });
+
+  it('player should receive message as long as sender is not the player who blocked him/her', async () => {
+    // player 0 and player 1 blocks player 3
+    blockPlayer(0, players[3].id);
+    blockPlayer(1, players[3].id);
+    
+    sendMessage(0, 'weather is hot today', 80);
+    sendMessage(1, 'weather is cold today', 80);
+    sendMessage(2, 'weather is warm today', 80);
+    expect(mockSockets[3].emit).toHaveBeenCalledTimes(1);
+    expect(mockSockets[3].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({message: 'weather is warm today'}));
+  });
+
+  it('should not broadcast message to anyone when all players are blocked other than sender himself', async () => {
+    // player 0 blocks everyone
+    for(let i=1; i<mockSockets.length; i++) {
+      blockPlayer(0, players[i].id);
+    }
+    // Player 0 sends a message via the socket
+    sendMessage(0, 'nobody should receive this', 80);
+    // check if sender himself received the message
+    expect(mockSockets[0].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    // Check other players does not receive the message
+    expect(mockSockets[1].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[2].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[3].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+  });
+
+  it('message should be broadcast with the correct text, blocking a user should not change this', async () =>  {     
+    blockPlayer(2, players[3].id);        
+    sendMessage(2, 'Welcome all', 80);       
+    expect(mockSockets[0].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({message: 'Welcome all'}));           
+  });  
+  
+  it('message should be broadcast with the correct sender id, blocking a user should not change this', async () =>  { 
+    blockPlayer(3, players[0].id);             
+    sendMessage(3, 'Welcome all', 80);      
+    expect(mockSockets[1].emit).toHaveBeenLastCalledWith('receiveChatMessage', expect.objectContaining({sender: players[3] }));           
+  });
+  
+  it('sender getting the receiver player details should not include the blocked player.', async () =>  { 
+    blockPlayer(0, players[1].id);               
+    sendMessage(0, 'I lost my wallet', 80);                   
+             
+    expect(mockSockets[0].emit).toHaveBeenLastCalledWith('receiveChatMessage', 
+    expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2], players[3]])}));           
+  });
+
+  it('unblocking a player who is not blocked', async () =>  { 
+    // unblocking a player multiple time is the same as unblocking the player once
+    unblockPlayer(0, players[1].id);
+    sendMessage(0, 'We should play with legos at camp', 80); 
+    expect(mockSockets[1].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+  
+  });
+
+  it('blocking someone who is already blocked', async () =>  { 
+    // blocking a player multiple time is the same as blocking the player once
+    blockPlayer(0, players[1].id); 
+    blockPlayer(0, players[1].id); 
+    blockPlayer(0, players[1].id);  
+    sendMessage(0, 'go get some coffee', 80); 
+    expect(mockSockets[1].emit).not.toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[0].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything()); 
+    expect(mockSockets[2].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+    expect(mockSockets[3].emit).toHaveBeenCalledWith('receiveChatMessage', expect.anything());
+  });
+
+  
 });

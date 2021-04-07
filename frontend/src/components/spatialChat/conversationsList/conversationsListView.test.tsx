@@ -35,6 +35,7 @@ const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
     return {
         chat: {
             chats: chatEntries,
+            blockedPlayerIds: [],
         }
     }
 }

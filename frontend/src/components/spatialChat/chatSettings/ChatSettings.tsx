@@ -143,6 +143,7 @@ export default function ChatSettings(): JSX.Element {
                   ))}
                 </Select>
               </FormControl>
+              <br />
               <FormControl>
                 <FormLabel htmlFor='chatRadius'>Chat Radius</FormLabel>
                 <Input

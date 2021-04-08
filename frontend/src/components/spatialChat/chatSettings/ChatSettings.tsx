@@ -18,6 +18,7 @@ import { MenuItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatEditorType } from '../../../classes/SpatialChat';
+import constants from '../../../constants';
 import {
   changeBroadcastRadius,
   changeEditorTypeAction,
@@ -153,6 +154,7 @@ export default function ChatSettings(): JSX.Element {
                   onChange={e => setLastRadius(e.target.value)}
                   name='chatRadius'
                   type='text'
+                  className={constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
                 />
               </FormControl>
             </ModalBody>

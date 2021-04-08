@@ -28,7 +28,7 @@ import { RootState } from '../../../redux/store';
  * Component to update chat settings such as chat radius, chat editor, etc.
  * @returns Chat Settings Component
  */
-export default function ChatSettings() {
+export default function ChatSettings(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const chateditorOptions = [
     { type: ChatEditorType.DEFAULT_EDITOR, text: 'Default Editor' },

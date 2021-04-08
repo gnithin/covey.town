@@ -38,7 +38,7 @@ export default function ChatSettings() {
   const currentEditorType: ChatEditorType = useSelector(
     (state: RootState) => state.chat.settingChatEditorType,
   );
-  const [lastEditorType, setLastEditorType] = useState<string | null>();
+  const [lastEditorType, setLastEditorType] = useState<string>();
   const currentRadius: number = useSelector(
     (state: RootState) => state.chat.settingChatBroadcastRadius,
   );
@@ -54,13 +54,17 @@ export default function ChatSettings() {
     setLastRadius(currentRadius.toString());
   }, [currentRadius]);
 
+  useEffect(() => {
+    setLastEditorType(currentEditorType.toString());
+  }, [currentEditorType]);
+
   const openSettings = () => {
     onOpen();
   };
 
   // Resetting the local states on close modal.
   const closeSettings = () => {
-    setLastEditorType(null);
+    setLastEditorType(currentEditorType.toString());
     setLastRadius(currentRadius.toString());
     onClose();
   };
@@ -82,12 +86,8 @@ export default function ChatSettings() {
     return true;
   };
 
-  const updateChatEditor = () => {
-    if (lastEditorType === '1') {
-      changeChatEditor(ChatEditorType.DEFAULT_EDITOR);
-    } else {
-      changeChatEditor(ChatEditorType.RICH_TEXT_EDITOR);
-    }
+  const updateChatEditor = () => {    
+      changeChatEditor(Number(lastEditorType));    
   };
   const updateChatRadius = () => {
     if (lastRadius) {
@@ -117,7 +117,7 @@ export default function ChatSettings() {
 
   return (
     <>
-      <MenuItem onClick={openSettings}>
+      <MenuItem data-testid= '' onClick={openSettings}>
         <Typography variant='body1'>Chat Settings</Typography>
       </MenuItem>
       <Modal isOpen={isOpen} onClose={closeSettings}>
@@ -159,7 +159,7 @@ export default function ChatSettings() {
 
             <ModalFooter>
               <Button
-                data-testid='updatebutton'
+                data-testid='updateChatSetting'
                 colorScheme='blue'
                 mr={3}
                 value='update'

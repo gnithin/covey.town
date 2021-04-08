@@ -71,7 +71,7 @@ export default function ChatSettings(): JSX.Element {
 
   const toast = useToast();
 
-  const isNumeric = (str: any): boolean =>  !Number.isNaN(Number(str));
+  const isNumeric = (str: string): boolean => !Number.isNaN(Number(str));
 
   const validateSettings = () => {
     if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) ||  Number(lastRadius) < 80 || Number(lastRadius) > 1000)
@@ -136,7 +136,7 @@ export default function ChatSettings(): JSX.Element {
                 <Select
                   value={lastEditorType || currentEditorType.toString()}
                   onChange={e => setLastEditorType(e.target.value)}>
-                  {chateditorOptions.map((editor, index) => (
+                  {chateditorOptions.map((editor) => (
                     <option value={editor.type.toString()} key={editor.type.toString()}>
                       {editor.text}
                     </option>

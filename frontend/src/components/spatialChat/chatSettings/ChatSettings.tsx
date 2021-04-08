@@ -75,8 +75,7 @@ export default function ChatSettings(): JSX.Element {
   const isNumeric = (str: string): boolean => !Number.isNaN(Number(str));
 
   const validateSettings = () => {
-    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) ||  Number(lastRadius) < 80 || Number(lastRadius) > 1000)
-     {
+    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) || Number(lastRadius) < 80 || Number(lastRadius) > 1000) {
       toast({
         title: 'Unable to update chat settings',
         description: 'Broadcast Radius should be between 80 and 1000',
@@ -87,8 +86,8 @@ export default function ChatSettings(): JSX.Element {
     return true;
   };
 
-  const updateChatEditor = () => {    
-      changeChatEditor(Number(lastEditorType));    
+  const updateChatEditor = () => {
+    changeChatEditor(Number(lastEditorType));
   };
   const updateChatRadius = () => {
     if (lastRadius) {
@@ -118,7 +117,7 @@ export default function ChatSettings(): JSX.Element {
 
   return (
     <>
-      <MenuItem data-testid= '' onClick={openSettings}>
+      <MenuItem data-testid='' onClick={openSettings}>
         <Typography variant='body1'>Chat Settings</Typography>
       </MenuItem>
       <Modal isOpen={isOpen} onClose={closeSettings}>

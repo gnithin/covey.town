@@ -10,6 +10,12 @@ TODO: Adding screenshots would be great!
 
 #### Frontend
 
+TODO: Write something about the frontend architecture
+![Frontend architecture](docs/frontend-conversations-diag.png)
+
+
+TODO: Write something about the mock
+![Frontend Mock](docs/frontend-chat-mockup.png)
 
 
 ### Blocking another user
@@ -23,4 +29,3 @@ TODO: Adding screenshots would be great!
 ### Rich text editor
 
 This was a frontend-only feature.
-

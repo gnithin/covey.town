@@ -18,6 +18,7 @@ import { MenuItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatEditorType } from '../../../classes/SpatialChat';
+import constants from '../../../constants';
 import {
   changeBroadcastRadius,
   changeEditorTypeAction,
@@ -28,7 +29,7 @@ import { RootState } from '../../../redux/store';
  * Component to update chat settings such as chat radius, chat editor, etc.
  * @returns Chat Settings Component
  */
-export default function ChatSettings() {
+export default function ChatSettings(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const chateditorOptions = [
     { type: ChatEditorType.DEFAULT_EDITOR, text: 'Default Editor' },
@@ -71,11 +72,10 @@ export default function ChatSettings() {
 
   const toast = useToast();
 
-  const isNumeric = (str: any): boolean =>  !Number.isNaN(Number(str));
+  const isNumeric = (str: string): boolean => !Number.isNaN(Number(str));
 
   const validateSettings = () => {
-    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) ||  Number(lastRadius) < 80 || Number(lastRadius) > 1000)
-     {
+    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) || Number(lastRadius) < 80 || Number(lastRadius) > 1000) {
       toast({
         title: 'Unable to update chat settings',
         description: 'Broadcast Radius should be between 80 and 1000',
@@ -86,8 +86,8 @@ export default function ChatSettings() {
     return true;
   };
 
-  const updateChatEditor = () => {    
-      changeChatEditor(Number(lastEditorType));    
+  const updateChatEditor = () => {
+    changeChatEditor(Number(lastEditorType));
   };
   const updateChatRadius = () => {
     if (lastRadius) {
@@ -117,7 +117,7 @@ export default function ChatSettings() {
 
   return (
     <>
-      <MenuItem data-testid= '' onClick={openSettings}>
+      <MenuItem data-testid='' onClick={openSettings}>
         <Typography variant='body1'>Chat Settings</Typography>
       </MenuItem>
       <Modal isOpen={isOpen} onClose={closeSettings}>
@@ -136,13 +136,14 @@ export default function ChatSettings() {
                 <Select
                   value={lastEditorType || currentEditorType.toString()}
                   onChange={e => setLastEditorType(e.target.value)}>
-                  {chateditorOptions.map((editor, index) => (
+                  {chateditorOptions.map((editor) => (
                     <option value={editor.type.toString()} key={editor.type.toString()}>
                       {editor.text}
                     </option>
                   ))}
                 </Select>
               </FormControl>
+              <br />
               <FormControl>
                 <FormLabel htmlFor='chatRadius'>Chat Radius</FormLabel>
                 <Input
@@ -153,6 +154,7 @@ export default function ChatSettings() {
                   onChange={e => setLastRadius(e.target.value)}
                   name='chatRadius'
                   type='text'
+                  className={constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
                 />
               </FormControl>
             </ModalBody>

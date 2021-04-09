@@ -7,6 +7,8 @@ TODO: Adding screenshots would be great!
 ### Chatting with another user
 
 #### Backend
+- There are no public listeners. There is no specific methods to add-listeners any more. The listeners are registered automically when a user connects and listens to updates.
+
 
 #### Frontend
 

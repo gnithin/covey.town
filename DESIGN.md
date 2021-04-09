@@ -10,7 +10,7 @@ TODO: Adding screenshots would be great!
 
 #### Frontend
 
-TODO: Write something about the frontend architecture
+TODO: Write something about the frontend architecture. The redux structure in particular
 ![Frontend architecture](docs/frontend-conversations-diag.png)
 
 
@@ -29,3 +29,5 @@ TODO: Write something about the mock
 ### Rich text editor
 
 This was a frontend-only feature.
+TODO: Write something about the structure in redux.
+

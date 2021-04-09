@@ -30,4 +30,4 @@ TODO: Write something about the mock
 
 This was a frontend-only feature.
 TODO: Write something about the structure in redux.
-
+![Rich text editor Component interaction](docs/rich-text-editor-arch.png)

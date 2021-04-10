@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,8 +16,10 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
-  Box
+  Box,
+  Tooltip,
 } from '@chakra-ui/react';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { MenuItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -151,7 +152,14 @@ export default function ChatSettings(): JSX.Element {
               <br />
               <FormControl>
                 <FormLabel htmlFor='chatRadius' >
-                  Chat Radius
+                  Chat Radius {'  '}
+                  <Tooltip
+                    label="Chat radius allows you to define the 'nearness' of the spatial chat. A bigger value would mean that your messages will be sent to users who are further away."
+                    aria-label="A tooltip"
+                    fontSize="sm"
+                  >
+                    <QuestionOutlineIcon fontSize="sm" />
+                  </Tooltip>
                 </FormLabel>
                 <Slider
                   aria-label="slider-ex-5"

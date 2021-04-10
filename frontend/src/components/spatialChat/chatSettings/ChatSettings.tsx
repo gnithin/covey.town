@@ -154,7 +154,7 @@ export default function ChatSettings(): JSX.Element {
                 <FormLabel htmlFor='chatRadius' >
                   Chat Radius {'  '}
                   <Tooltip
-                    label="Chat radius allows you to define the 'nearness' of the spatial chat. A bigger value would mean that your messages will be sent to users who are further away."
+                    label="Chat radius allows you to define the 'nearness' of the spatial chat. A bigger radius size would mean that your messages will be sent to users who are further away."
                     aria-label="A tooltip"
                     fontSize="sm"
                   >

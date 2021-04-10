@@ -6,6 +6,8 @@ Covey.Town provides a virtual meeting space where different groups of people can
 Covey.Town was built for Northeastern's [Spring 2021 software engineering course](https://neu-se.github.io/CS4530-CS5500-Spring-2021/), and is designed to be reused across semesters.
 You can view our reference deployment of the app at [app.covey.town](https://app.covey.town/).
 
+[Link to the repository](https://github.com/gnithin/covey.town)
+
 ### Deployment 
 
 Both the frontend and the backend are deployed whenever any PR is merged with the master branch.

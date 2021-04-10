@@ -163,9 +163,9 @@ export default function ChatSettings(): JSX.Element {
                   max={1000}
                   step={50}
                 >
-                  <SliderTrack bg="red.100">
+                  <SliderTrack bg="green.100">
                     <Box position="relative" right={10} />
-                    <SliderFilledTrack bg="tomato" />
+                    <SliderFilledTrack bg="darkgreen" />
                   </SliderTrack>
                   <SliderThumb boxSize={6} />
                 </Slider>

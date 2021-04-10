@@ -13,6 +13,11 @@ import {
   Select,
   useDisclosure,
   useToast,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Box
 } from '@chakra-ui/react';
 import { MenuItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
@@ -145,17 +150,28 @@ export default function ChatSettings(): JSX.Element {
               </FormControl>
               <br />
               <FormControl>
-                <FormLabel htmlFor='chatRadius'>Chat Radius</FormLabel>
-                <Input
-                  data-testid='chatRadius'
-                  id='chatRadius'
-                  placeholder='80'
-                  value={lastRadius}
-                  onChange={e => setLastRadius(e.target.value)}
-                  name='chatRadius'
-                  type='text'
-                  className={constants.CUSTOM_PRIORITY_FOCUS_CLASS_FOR_INPUT}
-                />
+                <FormLabel htmlFor='chatRadius' >
+                  Chat Radius
+                </FormLabel>
+                <Slider
+                  aria-label="slider-ex-5"
+                  onChange={(val) => {
+                    setLastRadius(String(val))
+                  }}
+                  value={Number(lastRadius)}
+                  min={80}
+                  max={1000}
+                  step={50}
+                >
+                  <SliderTrack bg="red.100">
+                    <Box position="relative" right={10} />
+                    <SliderFilledTrack bg="tomato" />
+                  </SliderTrack>
+                  <SliderThumb boxSize={6} />
+                </Slider>
+                <Box>
+                  Radius size: {lastRadius} units
+                </Box>
               </FormControl>
             </ModalBody>
 

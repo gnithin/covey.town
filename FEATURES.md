@@ -61,6 +61,6 @@ To enable the rich text editor -
 The "nearness" of the users around you is defined by this setting. This ranges from 80 to 1000. The smaller the number, smaller your chat boundary is. the means your messages will be sent to only those people, who are within that boundary. Note that, The "Chat Radius" setting just affects the spatial-chat and not the spatial-video feature.
 
 <kbd>
-	<img src="docs/chat-radius.png" alt="Chat Radius Example"/>
+	<img src="docs/chat-radius.png" alt="Chat Radius Example" height="600" />
 </kbd>
 

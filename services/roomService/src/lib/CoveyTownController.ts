@@ -42,6 +42,7 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
  * can occur (e.g. joining a town, moving, leaving a town)
  */
 export default class CoveyTownController {
+
   get capacity(): number {
     return this._capacity;
   }

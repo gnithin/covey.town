@@ -466,6 +466,7 @@ export default function WorldMap(): JSX.Element {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const targetHasFocusClass = (target: any): boolean => {
       if (!target) {
         return false

@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,11 +12,19 @@ import {
   Select,
   useDisclosure,
   useToast,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Box,
+  Tooltip,
 } from '@chakra-ui/react';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { MenuItem, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatEditorType } from '../../../classes/SpatialChat';
+import constants from '../../../constants';
 import {
   changeBroadcastRadius,
   changeEditorTypeAction,
@@ -28,7 +35,7 @@ import { RootState } from '../../../redux/store';
  * Component to update chat settings such as chat radius, chat editor, etc.
  * @returns Chat Settings Component
  */
-export default function ChatSettings() {
+export default function ChatSettings(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const chateditorOptions = [
     { type: ChatEditorType.DEFAULT_EDITOR, text: 'Default Editor' },
@@ -71,11 +78,10 @@ export default function ChatSettings() {
 
   const toast = useToast();
 
-  const isNumeric = (str: any): boolean =>  !Number.isNaN(Number(str));
+  const isNumeric = (str: string): boolean => !Number.isNaN(Number(str));
 
   const validateSettings = () => {
-    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) ||  Number(lastRadius) < 80 || Number(lastRadius) > 1000)
-     {
+    if (!lastRadius || lastRadius?.trim().length === 0 || !isNumeric(lastRadius) || Number(lastRadius) < 80 || Number(lastRadius) > 1000) {
       toast({
         title: 'Unable to update chat settings',
         description: 'Broadcast Radius should be between 80 and 1000',
@@ -86,8 +92,8 @@ export default function ChatSettings() {
     return true;
   };
 
-  const updateChatEditor = () => {    
-      changeChatEditor(Number(lastEditorType));    
+  const updateChatEditor = () => {
+    changeChatEditor(Number(lastEditorType));
   };
   const updateChatRadius = () => {
     if (lastRadius) {
@@ -117,7 +123,7 @@ export default function ChatSettings() {
 
   return (
     <>
-      <MenuItem data-testid= '' onClick={openSettings}>
+      <MenuItem data-testid='' onClick={openSettings}>
         <Typography variant='body1'>Chat Settings</Typography>
       </MenuItem>
       <Modal isOpen={isOpen} onClose={closeSettings}>
@@ -136,24 +142,44 @@ export default function ChatSettings() {
                 <Select
                   value={lastEditorType || currentEditorType.toString()}
                   onChange={e => setLastEditorType(e.target.value)}>
-                  {chateditorOptions.map((editor, index) => (
+                  {chateditorOptions.map((editor) => (
                     <option value={editor.type.toString()} key={editor.type.toString()}>
                       {editor.text}
                     </option>
                   ))}
                 </Select>
               </FormControl>
+              <br />
               <FormControl>
-                <FormLabel htmlFor='chatRadius'>Chat Radius</FormLabel>
-                <Input
-                  data-testid='chatRadius'
-                  id='chatRadius'
-                  placeholder='80'
-                  value={lastRadius}
-                  onChange={e => setLastRadius(e.target.value)}
-                  name='chatRadius'
-                  type='text'
-                />
+                <FormLabel htmlFor='chatRadius' >
+                  Chat Radius {'  '}
+                  <Tooltip
+                    label="Chat radius allows you to define the 'nearness' of the spatial chat. A bigger radius size would mean that your messages will be sent to users who are further away."
+                    aria-label="A tooltip"
+                    fontSize="sm"
+                  >
+                    <QuestionOutlineIcon fontSize="sm" />
+                  </Tooltip>
+                </FormLabel>
+                <Slider
+                  aria-label="slider-ex-5"
+                  onChange={(val) => {
+                    setLastRadius(String(val))
+                  }}
+                  value={Number(lastRadius)}
+                  min={80}
+                  max={1000}
+                  step={50}
+                >
+                  <SliderTrack bg="green.100">
+                    <Box position="relative" right={10} />
+                    <SliderFilledTrack bg="darkgreen" />
+                  </SliderTrack>
+                  <SliderThumb boxSize={6} />
+                </Slider>
+                <Box>
+                  Radius size: {lastRadius} units
+                </Box>
               </FormControl>
             </ModalBody>
 

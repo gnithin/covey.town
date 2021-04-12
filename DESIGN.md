@@ -16,8 +16,9 @@ TODO: Add something here
 The following diagram represents how the spatial-chat feature interacts with the backend.
 
 <kbd>
-	<img src="docs/frontend-conversations-diag.png" alt="Frontend architecture"/>
+	<img src="docs/frontend-conversations-diag.png" alt="Frontend architecture" height="600px"/>
 </kbd>
+
 
 Spatial Chat stores all of the data in a Redux store. We used redux primarily due to the fact that there are multiple components that might need to interact with data. Having a centralized store, makes it easier for different components to fetch them and not depend on their ancestor-components passing them through component-props.
 
@@ -28,7 +29,7 @@ When a user types in a message and sends it, the frontend emits a "sendChatMessa
 Before we began coding up the frontend, this was the mock-up we based it off of. The labels indicate the names of the components. 
 
 <kbd>
-	<img src="docs/frontend-chat-mockup.png" alt="Frontend Mock"/>
+	<img src="docs/frontend-chat-mockup.png" alt="Frontend Mock"  height="750px"/>
 </kbd>
 
 

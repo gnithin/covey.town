@@ -57,10 +57,3 @@ The "nearness" of the users around you is defined by this setting. This ranges f
 
 ![Chat Radius example](docs/chat-radius.png)
 
-
-
-
-
-
-
-

@@ -12,7 +12,8 @@ Spatial chat is a feature where a user can send a text-message to another user n
 - The sender can see the recipients by hovering over a particular message and clicking on the arrow icon. A dropdown will appear, with a list of recipients, under the "Sent To" section.
 - As a recipient of a message, you can see the messages sent from other users near you, and when it was sent.
 
-TODO: Add screenshots/GIF
+
+![Basic Chat Example](docs/basic-chat.gif)
 
 
 ### Blocking another user

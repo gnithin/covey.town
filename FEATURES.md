@@ -12,8 +12,9 @@ Spatial chat is a feature where a user can send a text-message to another user n
 - The sender can see the recipients by hovering over a particular message and clicking on the arrow icon. A dropdown will appear, with a list of recipients, under the "Sent To" section.
 - As a recipient of a message, you can see the messages sent from other users near you, and when it was sent.
 
-
-![Basic Chat Example](docs/basic-chat.gif)
+<kbd>
+	<img src="docs/basic-chat.gif" alt="Basic Chat Example"/>
+</kbd>
 
 
 ### Blocking another user
@@ -26,7 +27,9 @@ In order to block a user, follow these steps -
 
 Note that, when you block a user, you are blocking them interacting with you, only by chat. The setting just affects the spatial-chat and not the spatial-video feature.
 
-![Block User Example](docs/block-user.gif)
+<kbd>
+	<img src="docs/block-user.gif" alt="Block user Example"/>
+</kbd>
 
 
 ### Rich text editor
@@ -48,12 +51,16 @@ To enable the rich text editor -
 - Font Type
 - Clear Formatting
 
-![Rich Text Editor Example](docs/rte.gif)
+<kbd>
+	<img src="docs/rte.gif" alt="Rich Text Editor Example"/>
+</kbd>
 
 
 ### Chat Radius
 
 The "nearness" of the users around you is defined by this setting. This ranges from 80 to 1000. The smaller the number, smaller your chat boundary is. the means your messages will be sent to only those people, who are within that boundary. Note that, The "Chat Radius" setting just affects the spatial-chat and not the spatial-video feature.
 
-![Chat Radius example](docs/chat-radius.png)
+<kbd>
+	<img src="docs/chat-radius.png" alt="Chat Radius Example"/>
+</kbd>
 

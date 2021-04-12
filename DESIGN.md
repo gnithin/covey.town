@@ -62,3 +62,8 @@ ChatReducerState = {
     blockedPlayerIds: [],
 };
 ```
+
+For the rich text editor UI, we tried out several libraries like [Draft.js](https://github.com/facebook/draft-js) and [react-rte](https://github.com/sstur/react-rte). We finally settled on [Quill](https://github.com/quilljs/quill) primarily because the documentation was very good, and the APIs were simple enough for our use-case. The other libraries had issues ranging from extremely steep learning curve, bad documentation, non-modifiable UI and not being able to render the output from the rich-text component.
+
+
+

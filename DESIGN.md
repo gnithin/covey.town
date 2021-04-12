@@ -2,7 +2,6 @@
 
 This document describes the design decisions that were made for individual user-stories.
 
-TODO: Adding screenshots would be great!
 
 ### Chatting with another user
 
@@ -13,7 +12,9 @@ TODO: Adding screenshots would be great!
 #### Frontend
 
 TODO: Write something about the frontend architecture. The redux structure in particular
+<kbd>
 ![Frontend architecture](docs/frontend-conversations-diag.png)
+</kbd>
 
 
 TODO: Write something about the mock

@@ -18,7 +18,7 @@ Spatial chat is a feature where a user can send a text-message to another user n
 
 
 ### Blocking another user
-You can prevent another user from sending any chat messages to you, by blocking them. Note that, if a user has blocked someone, they can no longer send them any messages as well.
+You can prevent another user from sending any chat messages to you, by blocking them. Note that, if a user has blocked someone the user can no longer send messages to the person being blocked as well.
 
 In order to block a user, follow these steps - 
 - In the chat-box, hover over the message of the user that you want to block. 

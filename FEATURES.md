@@ -26,7 +26,8 @@ In order to block a user, follow these steps -
 
 Note that, when you block a user, you are blocking them interacting with you, only by chat. The setting just affects the spatial-chat and not the spatial-video feature.
 
-TODO: Add screenshots/GIF
+![Block User Example](docs/block-user.gif)
+
 
 ### Rich text editor
 Covey.Town provides an option to use a "Rich Text Editor" to send messages with, apart from the default editor. 
@@ -47,17 +48,14 @@ To enable the rich text editor -
 - Font Type
 - Clear Formatting
 
-TODO: Add screenshot
+![Rich Text Editor Example](docs/rte.gif)
 
 
-### Chat Settings
-Chat Settings help you configure how the chat works best for you. There are 2 options - 
-- Chat Editor Type - Refer to the Rich Text Editor (TODO: Add a link to that section probably) section above for more details 
-- Chat Radius - So the "nearness" of the users around you is defined by this setting. This ranges from 80 to 1000. The smaller the number, smaller your chat boundary is. the means your messages will be sent to only those people, who are within that boundary.
+### Chat Radius
 
-Note that, The "Chat Radius" setting just affects the spatial-chat and not the spatial-video feature.
+The "nearness" of the users around you is defined by this setting. This ranges from 80 to 1000. The smaller the number, smaller your chat boundary is. the means your messages will be sent to only those people, who are within that boundary. Note that, The "Chat Radius" setting just affects the spatial-chat and not the spatial-video feature.
 
-
+![Chat Radius example](docs/chat-radius.png)
 
 
 

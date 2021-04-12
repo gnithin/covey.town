@@ -37,7 +37,7 @@ Before we began coding up the frontend, this was the mock-up we based it off of.
 
 ### Backend
 
-TODO: Add something here
+To set up blocking another user in backend, we added a map that kept track of a chat block list for each PlayerSession. We also added two more listening events, 'blockPlayerInChat' and 'unblockPlayerInChat'. The main idea was that whenever a user blocks/unblocks another user, the two respective  events are being listened and will add the blocked player to the chat block list or remove the blocked player from the chat block list depending on the action. Finally, we filter out the blocked player sessions from the chat block list when sending back the chat messages to the listeners.
 
 ### Frontend
 

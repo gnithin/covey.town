@@ -2,8 +2,6 @@
 
 Spatial chat is a feature where a user can send a text-message to another user near them, in the same town.
 
-TODO: Adding screenshots would be great! GIFs are even better!
-
 ### Chatting with another user
 - Join a room
 - On the right of the page (next to the map), there is a chat-box. You can use this to chat with people near you!
@@ -27,7 +25,6 @@ In order to block a user, follow these steps -
 
 Note that, when you block a user, you are blocking them interacting with you, only by chat. The setting just affects the spatial-chat and not the spatial-video feature.
 
-TODO: Change "Block Player" to "Block User" in the code!
 TODO: Add screenshots/GIF
 
 ### Rich text editor
@@ -58,8 +55,6 @@ Chat Settings help you configure how the chat works best for you. There are 2 op
 - Chat Radius - So the "nearness" of the users around you is defined by this setting. This ranges from 80 to 1000. The smaller the number, smaller your chat boundary is. the means your messages will be sent to only those people, who are within that boundary.
 
 Note that, The "Chat Radius" setting just affects the spatial-chat and not the spatial-video feature.
-
-TODO: Think about the steps feature if possible. Else it's all good.
 
 
 

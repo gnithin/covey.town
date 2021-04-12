@@ -53,8 +53,8 @@ const ConversationView: React.FunctionComponent<IConversationView> = (
 
         return (
             <MenuItem>
-                <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-                    <p>Block Player</p>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                    <p>Block User</p>
                     <Switch
                         size="md"
                         colorScheme="red"

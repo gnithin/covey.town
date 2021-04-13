@@ -30,6 +30,10 @@ import {
 } from '../../../redux/actions/chatReducerActions';
 import { RootState } from '../../../redux/store';
 
+const MIN_BROADCAST_RADIUS = 80;
+const MAX_BROADCAST_RADIUS = 1000;
+const BROADCAST_RADIUS_STEP = 46;
+
 /**
  * Component to update chat settings such as chat radius, chat editor, etc.
  * @returns Chat Settings Component
@@ -120,6 +124,12 @@ export default function ChatSettings(): JSX.Element {
     }
   };
 
+  // Make it go from 1 to 100.
+  const convertToReadableUnits = (actualUnits: number): number =>
+    Math.max(1,
+      Math.floor(((actualUnits - MIN_BROADCAST_RADIUS) * 100) / (MAX_BROADCAST_RADIUS - MIN_BROADCAST_RADIUS))
+    )
+
   return (
     <>
       <MenuItem data-testid='' onClick={openSettings}>
@@ -166,9 +176,9 @@ export default function ChatSettings(): JSX.Element {
                     setLastRadius(String(val))
                   }}
                   value={Number(lastRadius)}
-                  min={80}
-                  max={1000}
-                  step={50}
+                  min={MIN_BROADCAST_RADIUS}
+                  max={MAX_BROADCAST_RADIUS}
+                  step={BROADCAST_RADIUS_STEP}
                 >
                   <SliderTrack bg="green.100">
                     <Box position="relative" right={10} />
@@ -177,7 +187,7 @@ export default function ChatSettings(): JSX.Element {
                   <SliderThumb boxSize={6} />
                 </Slider>
                 <Box>
-                  Radius size: {lastRadius} units
+                  Radius size: {convertToReadableUnits(Number(lastRadius))} units
                 </Box>
               </FormControl>
             </ModalBody>

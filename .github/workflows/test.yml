@@ -23,6 +23,7 @@ jobs:
       run: | 
         cd frontend
         npm ci
+        npm run lint
         npm test
     
   test-backend:
@@ -45,6 +46,7 @@ jobs:
       run: | 
         cd services/roomService/
         npm ci
+        npm run lint
         npm test
 
   deploy_frontend:

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-await-in-loop,@typescript-eslint/no-loop-func,no-restricted-syntax */
 import React, { ReactElement } from 'react'
 import '@testing-library/jest-dom'
 import { render as rtlRender } from '@testing-library/react'
-import ConversationsListView from './index'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import ConversationsListView from './index'
 import reducer from '../../../redux/reducers';
 import { ChatEntry } from '../../../classes/SpatialChat';
 import Player from '../../../classes/Player';
@@ -18,9 +19,8 @@ const render = (
     } = {}
 ) => {
     const store = createStore(reducer, initialState);
-    const Wrapper: React.FC = ({ children }) => {
-        return <Provider store={store}>{children}</Provider>
-    }
+    // eslint-disable-next-line react/prop-types
+    const Wrapper: React.FC = ({ children }) => <Provider store={store}>{children}</Provider>
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
@@ -31,29 +31,25 @@ jest.mock('../../../hooks/useCoveyAppState', () => ({
 }));
 
 // Helper method to create initial state with chat-entries
-const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => {
-    return {
-        chat: {
-            chats: chatEntries,
-            blockedPlayerIds: [],
-        }
+const createInitialStateWithChatEntries = (chatEntries: ChatEntry[]) => ({
+    chat: {
+        chats: chatEntries,
+        blockedPlayerIds: [],
     }
-}
+})
 
 // Helper method to create a chat-entry
-const createChatEntryForMessage = (message: string) => {
-    return new ChatEntry(
-        new Player(`dummy-id-${new Date().getTime()}`, "dummy-name", {
-            x: 1,
-            y: 1,
-            rotation: 'left',
-            moving: true,
-        }),
-        message,
-        (new Date().getTime()),
-        undefined,
-    );
-}
+const createChatEntryForMessage = (message: string) => new ChatEntry(
+    new Player(`dummy-id-${new Date().getTime()}`, "dummy-name", {
+        x: 1,
+        y: 1,
+        rotation: 'left',
+        moving: true,
+    }),
+    message,
+    (new Date().getTime()),
+    undefined,
+)
 
 describe('Rendering the conversations list view', () => {
     it('Test if the conversations list wrapper is loaded on the screen', () => {

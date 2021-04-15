@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {mock, mockReset, notEmpty} from 'jest-mock-extended';
+import {mock, mockReset} from 'jest-mock-extended';
 import {Socket} from 'socket.io';
 import TwilioVideo from './TwilioVideo';
 import Player from '../types/Player';
@@ -327,15 +327,15 @@ describe('block-user chat message', () => {
   
   function blockPlayer(playerIndex: number, playerID: string) {
     mockSockets[playerIndex].on.mock.calls.forEach(call => {
-    if (call[0] === 'blockPlayerInChat')
-      call[1](playerID);
+      if (call[0] === 'blockPlayerInChat')
+        call[1](playerID);
     });
   }
 
   function unblockPlayer(playerIndex: number, playerID: string) {
     mockSockets[playerIndex].on.mock.calls.forEach(call => {
-    if (call[0] === 'unblockPlayerInChat')
-      call[1](playerID);
+      if (call[0] === 'unblockPlayerInChat')
+        call[1](playerID);
     });
   }
 
@@ -418,7 +418,7 @@ describe('block-user chat message', () => {
 
   it('should not broadcast message to anyone when all players are blocked other than sender himself', async () => {
     // player 0 blocks everyone
-    for(let i=1; i<mockSockets.length; i++) {
+    for (let i=1; i<mockSockets.length; i+=1) {
       blockPlayer(0, players[i].id);
     }
     // Player 0 sends a message via the socket
@@ -448,7 +448,7 @@ describe('block-user chat message', () => {
     sendMessage(0, 'I lost my wallet', 80);                   
              
     expect(mockSockets[0].emit).toHaveBeenLastCalledWith('receiveChatMessage', 
-    expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2], players[3]])}));           
+      expect.objectContaining({receivingPlayers : expect.arrayContaining([players[2], players[3]])}));           
   });
 
   it('unblocking a player who is not blocked', async () =>  { 
